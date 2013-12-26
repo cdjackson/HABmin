@@ -29,7 +29,8 @@
  * to convey the resulting work.
  */
 
-/** OpenHAB Admin Console HABmin
+/**
+ * OpenHAB Admin Console HABmin
  *
  * @author Chris Jackson
  */
@@ -48,7 +49,8 @@ Ext.define('openHAB.automation.automation', {
         var ruleList = Ext.create('openHAB.automation.ruleList');
         var ruleLibrary = Ext.create('openHAB.automation.ruleLibrary');
         var ruleModelList = Ext.create('openHAB.automation.ruleFileList');
-        var notificationList = Ext.create('openHAB.automation.notificationList');
+        var eventList = Ext.create('openHAB.automation.eventList');
+        var actionList = Ext.create('openHAB.automation.actionList');
 
         var accordion = Ext.create('Ext.Panel', {
             split:true,
@@ -59,7 +61,7 @@ Ext.define('openHAB.automation.automation', {
                 type:'accordion',
                 hideCollapseTool:true
             },
-            items:[ruleList, ruleLibrary, ruleModelList, notificationList]
+            items:[ruleList, ruleLibrary, ruleModelList, eventList, actionList]
         });
 
         var propertyContainer = Ext.create('Ext.panel.Panel', {

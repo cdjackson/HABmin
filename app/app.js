@@ -90,7 +90,8 @@ Ext.require([
     'openHAB.system.logViewer',
     'openHAB.system.systemBundles',
     'openHAB.automation.automation',
-    'openHAB.automation.notificationList',
+    'openHAB.automation.actionList',
+    'openHAB.automation.eventList',
     'openHAB.automation.ruleList',
     'openHAB.automation.ruleLibrary',
     'openHAB.automation.ruleProperties'
