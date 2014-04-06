@@ -86,6 +86,7 @@ Ext.require([
     'Ext.ux.grid.QuickFilter',
     'Ext.ux.statusbar.StatusBar',
     'Ext.ux.aceeditor.Panel',
+    'Ext.ux.blockly.*',
     'Ext.ux.window.Notification',
     'openHAB.graph.*',
     'openHAB.config.*',

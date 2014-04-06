@@ -99,138 +99,47 @@ Ext.define('openHAB.automation.ruleProperties', {
         });
         ruleTriggerTypeStore.loadData(ruleTriggerTypeArray);
 
-        var ruleForm = new Ext.form.Panel({
-            border:false,
-            bodyPadding:5,
-            fieldDefaults:{
-                labelWidth:100
-            },
-            defaultType:'textfield',
-            items:[
+        var categoryArray = [
+            {name: "Procedures", tooltip: "Hello there"},
+            {name: "Math", icon: "sum.png", tooltip: "Hello there math"}
+        ];
+        var toolArray = [
+            {category: "Procedures", block: "<xml><block type='procedures_defnoreturn'></block></xml>", name: "X"},
+            {category: "Procedures", block: "<xml><block type='procedures_ifreturn'></block></xml>", name: "X"},
+            {category: "Procedures", block: "<xml><block type='controls_if'></block></xml>", name: "X"},
+            {category: "Math", block: "<xml><block type='controls_if'><mutation elseif='1'></mutation></block></xml>", name: "X"},
+            {category: "Procedures", block: "<xml><block type='math_arithmetic'></block></xml>", name: "X"},
+            {category: "Math", block: "<xml><block type='controls_repeat_ext'></block></xml>", name: "X"},
+            {category: "Math", block: "<xml><block type='variables_set'></block></xml>", name: "X"}
+        ];
+
+        var toolbar = Ext.create('Ext.toolbar.Toolbar', {
+            items: [
                 {
-                    fieldLabel:'Rule Name',
-                    name:'name',
-                    anchor:'100%'
-                },
-                {
-                    fieldLabel:'Description',
-                    name:'description',
-                    anchor:'100%'
+                    icon: 'information-balloon.png',
+                    itemId: 'show',
+                    text: "Show XML",
+                    cls: 'x-btn-icon',
+                    disabled: false,
+                    tooltip: "Save the workspace",
+                    handler: function () {
+                       // helpWindow.show();
+                    }
                 }
             ]
         });
 
-        var ruleTrigger = Ext.create('Ext.panel.Panel', {
-            padding:'0 5 5 5',
-            title:'Trigger',
-            collapsed:false,
-            collapsible:true,
-            layout:{
-                type:'vbox',
-                align:'stretch',
-                pack:'start'
-            },
-            minHeight:100
+        var blockly = Ext.create('Ext.ux.blockly.Blockly', {
+            tbar: toolbar,
+            toolbox: true,
+            collapse: true,
+            toolboxCategories: categoryArray,
+            toolboxTools: toolArray,
+            trashcan: true,
+            blocks: ""//"<xml>"+document.getElementById('go').innerHTML+"</xml>"
         });
 
-        var ruleAction = Ext.create('Ext.panel.Panel', {
-            padding:'0 5 5 5',
-            title:'Action',
-            collapsed:false,
-            collapsible:true,
-            layout:{
-                type:'vbox',
-                align:'stretch',
-                pack:'start'
-            },
-            minHeight:100
-        });
-
-        var ruleContainer = Ext.create('Ext.panel.Panel', {
-            layout:{
-                type:'vbox',
-                align:'stretch',
-                pack:'start'
-            },
-            items:[
-                ruleForm,
-                ruleTrigger,
-                ruleAction
-            ]
-        });
-
-        addTrigger();
-
-
-        this.items = [ruleContainer];
-        this.callParent();
-
-        function addTrigger() {
-
-            var trigger = Ext.create('Ext.form.Panel', {
-                xtype:'form',
-                border:false,
-                fieldDefaults:{
-                    labelAlign:'top',
-                    msgTarget:'side'
-                },
-                defaults:{
-                    border:false,
-                    xtype:'panel',
-                    padding:10
-                },
-                layout: 'column',
-                items:[
-                    {
-                        xtype:'combobox',
-                        fieldLabel:'Trigger Type',
-                        store:ruleTriggerTypeStore,
-                        valueField: 'id',
-                        displayField: 'label',
-                        queryMode: 'local',
-                        name:'type',
-                        columnWidth: 0.4
-                    },
-                    {
-                        xtype:'textfield',
-                        fieldLabel:'Parameter',
-                        name:'Parameter',
-                        columnWidth: 0.6
-                    },
-                    {
-                        width:100,
-                        items: [
-                            {
-                                xtype:'button',
-                                icon:'images/minus-button.png',
-                                text:'Delete',
-                                width:80,
-                                listeners:{
-                                    scope: this,
-                                    click:function (btn, e, eOpts) {
-                                        var x = btn.up("form");
-                                        ruleTrigger.remove(x);
-                                    }
-                                }
-                            },
-                            {
-                                xtype:'button',
-                                icon:'images/plus-button.png',
-                                text:'Add',
-                                width:80,
-                                listeners:{
-                                    scope: this,
-                                    click:function (btn, e, eOpts) {
-                                        addTrigger();
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                ]
-            });
-            ruleTrigger.add(trigger);
-        }
+        this.items = blockly;
     }
 })
 ;
