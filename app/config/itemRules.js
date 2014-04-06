@@ -50,8 +50,27 @@ Ext.define('openHAB.config.itemRules', {
         var itemName = "";
         var ruleRecord;
 
+        // Load the rules for this item
+        var store = Ext.create('Ext.data.JsonStore', {
+            model: 'RuleTemplateModel',
+            proxy: {
+                type: 'rest',
+                url: HABminBaseURL + '/config/rules/library/list/', // + ,
+                reader: {
+                    type: 'json',
+                    root: 'rule'
+                },
+                headers: {'Accept': 'application/json'},
+                pageParam: undefined,
+                startParam: undefined,
+                sortParam: undefined,
+                limitParam: undefined
+            },
+            autoLoad: true
+        });
+
         var toolbar = Ext.create('Ext.toolbar.Toolbar', {
-            itemId:'toolbar',
+            itemId: 'toolbar',
             items: [
                 {
                     icon: 'images/cross.png',
@@ -68,13 +87,13 @@ Ext.define('openHAB.config.itemRules', {
                     }
                 },
                 {
-                    icon:'images/disk.png',
-                    itemId:'save',
+                    icon: 'images/disk.png',
+                    itemId: 'save',
                     text: language.save,
-                    cls:'x-btn-icon',
-                    disabled:false,
-                    tooltip:language.config_ItemPropertiesSaveChangeTip,
-                    handler:function () {
+                    cls: 'x-btn-icon',
+                    disabled: false,
+                    tooltip: language.config_ItemPropertiesSaveChangeTip,
+                    handler: function () {
                         this.up('#itemPropertiesMain').saveItem();
                         toolbar.getComponent('cancel').disable();
                         toolbar.getComponent('save').disable();
@@ -158,7 +177,17 @@ Ext.define('openHAB.config.itemRules', {
                 {
                     text: language.config_ItemRulesName,
                     flex: 2,
-                    dataIndex: 'label'
+                    dataIndex: 'label',
+                    renderer: function (value, meta, record) {
+                        // If a description is provided, then display this as a tooltip
+                        var description = record.get("description");
+                        if (description != "") {
+                            description = Ext.String.htmlEncode(description);
+                            meta.tdAttr = 'data-qtip="' + description + '"';
+                        }
+
+                        return value;
+                    }
                 },
                 {
                     text: language.config_ItemRulesItem,
@@ -229,14 +258,35 @@ Ext.define('openHAB.config.itemRules', {
             var ruleVariables = [].concat(rule.get("variable"));
             var ruleFields = [];
             for (var cnt = 0; cnt < ruleVariables.length; cnt++) {
-                ruleFields[cnt] = {};
-                ruleFields[cnt].xtype = 'textfield';
-                ruleFields[cnt].allowBlank = false;
-                ruleFields[cnt].maxLength = 75;
-                ruleFields[cnt].enforceMaxLength = true;
-                ruleFields[cnt].fieldLabel = ruleVariables[cnt].label;
-                ruleFields[cnt].value = transposeVariables(ruleVariables[cnt].value);
-                ruleFields[cnt].name = ruleVariables[cnt].name;
+                // Only show 'local' variables
+                if(ruleVariables[cnt].scope != "Item" && ruleVariables[cnt].scope != "Setup")
+                    continue;
+
+                var newField = {};
+                switch (ruleVariables[cnt].type) {
+                    case "Item":
+                        newField.xtype = 'combobox';
+                        newField.valueField = 'name';
+                        newField.displayField = 'name';
+                        newField.queryMode = 'local';
+                        newField.editable = false;
+                        newField.store = itemConfigStore;
+                        break;
+                    case "Number":
+                        newField.xtype = 'numberfield';
+                        break;
+                    default:
+                        newField.xtype = 'textfield';
+                        break;
+                }
+                newField.allowBlank = false;
+                newField.maxLength = 75;
+                newField.enforceMaxLength = true;
+                newField.fieldLabel = ruleVariables[cnt].label;
+                newField.value = transposeVariables(ruleVariables[cnt].value);
+                newField.name = ruleVariables[cnt].name;
+
+                ruleFields.push(newField);
             }
 
             var formPanel = new Ext.form.Panel({

@@ -97,9 +97,11 @@ Ext.define('openHAB.config.itemList', {
                         // User can type their own, but this gives them options.
                         var models = [];
                         var ocnt = 0;
-                        for (var cnt = 0; cnt < itemConfigStore.getTotalCount(); cnt++) {
+
+                        var allRecords = itemConfigStore.queryBy(function(){return true;});
+                        allRecords.each(function(r) {
                             var found = false;
-                            var name = itemConfigStore.getAt(cnt).get("model");
+                            var name = r.get("model");
                             for (var mcnt = 0; mcnt < models.length; mcnt++) {
                                 if (models[mcnt].name == name) {
                                     found = true;
@@ -111,7 +113,7 @@ Ext.define('openHAB.config.itemList', {
                                 models[ocnt].name = name;
                                 ocnt++;
                             }
-                        }
+                        });
 
                         var form = Ext.widget('form', {
                             layout: {
@@ -254,10 +256,10 @@ Ext.define('openHAB.config.itemList', {
                         var img = '';
                         var id = persistenceItemStore.findExact("name", record.get("name"));
                         if (id != -1) {
-                            img = '<img src="images/database-small.png">';
+                            metadata.tdCls = 'grid-database';
                         }
 
-                        return '<span>' + value + '</span><span style="float:right">' + img + '</span>';
+                        return value;
                     }
                 },
                 {

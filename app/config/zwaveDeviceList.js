@@ -174,7 +174,6 @@ Ext.define('openHAB.config.zwaveDeviceList', {
                     }
                 }
             },
-            flex: 1,
             header: false,
             split: true,
             tbar: toolbar,
@@ -244,20 +243,20 @@ Ext.define('openHAB.config.zwaveDeviceList', {
                         var img = "";
                         switch (record.get('state')) {
                             case 'OK':
-                                img = '<img height="12" src="images/status.png">';
+                                meta.tdCls = 'grid-ok';
                                 break;
                             case 'WARNING':
-                                img = '<img height="12" src="images/status-away.png">';
+                                meta.tdCls = 'grid-warning';
                                 break;
                             case 'ERROR':
-                                img = '<img height="12" src="images/status-busy.png">';
+                                meta.tdCls = 'grid-error';
                                 break;
                             case 'INITIALIZING':
-                                img = '<img height="12" src="images/status-offline.png">';
+                                meta.tdCls = 'grid-initializing';
                                 break;
                         }
 
-                        return '<span>' + value + '</span><span style="float:right">' + img + '</span>';
+                        return value;
                     }
                 },
                 {
@@ -267,6 +266,10 @@ Ext.define('openHAB.config.zwaveDeviceList', {
                     renderer: function (value, meta, record) {
                         if (value == "")
                             return "";
+
+                        // If the status is PENDING, then mark it so...
+                        if(record.get('state') == "PENDING")
+                            meta.style = 'background-color: #FDFD96;border-radius: 8px;';
 
                         // If this is a list, then we want to display the value, not the number!
                         var type = record.get('type');
@@ -437,7 +440,7 @@ Ext.define('openHAB.config.zwaveDeviceList', {
                 });
             }
         },
-        interval: 1500
+        interval: 5000
     },
     listeners: {
         beforeshow: function (grid, eOpts) {
