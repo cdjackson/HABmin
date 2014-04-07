@@ -26,7 +26,7 @@ Ext.define('Ext.ux.blockly.Blockly', {
             me.blockly = {};
 
         if (me.blockly.toolbox == true) {
-            // Create an array of category grids.
+            // Create an array of category stores and grids.
             for (var i = 0; i < me.blockly.toolboxCategories.length; i++) {
                 // (Unfortunately!) We need to use separate stores with an accordion.
                 // If we just use a filter, there is a problem as for a short
@@ -39,8 +39,23 @@ Ext.define('Ext.ux.blockly.Blockly', {
                         {name: 'name'}
                     ]
                 });
+/*
+                // If we specify a category that matches the block categories
+                // Then we load up all the blocks...
+                if(me.blockly.toolboxTools[t].block == null) {
+                    // Loop through the blocks list
+                    for (var blkName in Blockly.Blocks) {
+                        if(blkName.substring(0, me.blockly.toolboxCategories[i].name.length) == me.blockly.toolboxCategories[i].name) {
+                            var block = {};
+                            block.category = me.blockly.toolboxCategories[i].name;
+                            block.block
+                            store.add(block);
+                        }
+                    }
+                }*/
 
-                // Load the data
+                // Load any blocks specified in the toolboxTool array
+                // These will be added to any from the categories
                 for (var t = 0; t < me.blockly.toolboxTools.length; t++) {
                     if (me.blockly.toolboxTools[t].category === me.blockly.toolboxCategories[i].name) {
                         store.add(me.blockly.toolboxTools[t]);
@@ -49,7 +64,7 @@ Ext.define('Ext.ux.blockly.Blockly', {
 
                 // Create the separate lists for the accordion panels
                 var cat = Ext.create('Ext.grid.Panel', {
-                    title: me.blockly.toolboxCategories[i].name,
+                    title: me.blockly.toolboxCategories[i].title,
                     icon: me.blockly.toolboxCategories[i].icon,
                     tooltip: me.blockly.toolboxCategories[i].tooltip,
                     category: me.blockly.toolboxCategories[i].name,
@@ -160,6 +175,11 @@ Ext.define('Ext.ux.blockly.Blockly', {
             listeners: {
                 afterrender: function () {
                     renderBlockly();
+                    Ext.fly(document.body).on('contextmenu', onContextMenu);
+                    function onContextMenu(e, target) {
+                        // don't show default context menu
+                        e.preventDefault();
+                    };
                 },
                 resize: function (panel, width, height, oldWidth, oldHeight, eOpts) {
                     Blockly.svgResize();
@@ -210,7 +230,6 @@ Ext.define('Ext.ux.blockly.Blockly', {
                         return true;
                     }
                 });
-
 
                 // Loop through all records in the toolbox and create the SVG graphic
                 for (var i = 0; i < toolboxGrids.length; i++) {
