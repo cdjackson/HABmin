@@ -602,6 +602,10 @@ var language = {
     rule_EditorLoadedOk: "Rule model '%s' loaded successfully.",
     rule_EditorErrorNoModel: "Error loading rule model - no model defined",
 
+    // automation/ruleProperties.js
+    rule_DrawSaveTip: "Save changes to the rule",
+    rule_DrawCancelTip: "Cancel the changes made to the rule",
+
     // automation/ruleLibrary.js
     rule_LibraryTitle: "Rule Library",
     rule_LibraryRule: "Rule",

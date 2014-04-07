@@ -86,7 +86,7 @@ Ext.require([
     'Ext.ux.grid.QuickFilter',
     'Ext.ux.statusbar.StatusBar',
     'Ext.ux.aceeditor.Panel',
-    'Ext.ux.blockly.*',
+    'Ext.ux.blockly.Blockly',
     'Ext.ux.window.Notification',
     'openHAB.graph.*',
     'openHAB.config.*',
@@ -251,8 +251,6 @@ Ext.Ajax.on('requestcomplete', function (conn, response, options, eOpts) {
 Ext.Ajax.on('requestexception', function (conn, response, options, eOpts) {
     ajaxOutstandingRequestCount--;
 });
-
-//Ext.getBody().on("contextmenu", Ext.emptyFn, null, {preventDefault: true});
 
 /**
  * Load a country language file

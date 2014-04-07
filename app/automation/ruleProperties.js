@@ -101,7 +101,7 @@ Ext.define('openHAB.automation.ruleProperties', {
 
         var categoryArray = [
             {name: "Procedures", tooltip: "Hello there"},
-            {name: "Math", icon: "sum.png", tooltip: "Hello there math"}
+            {name: "Math", icon: "images/sum.png", tooltip: "Hello there math"}
         ];
         var toolArray = [
             {category: "Procedures", block: "<xml><block type='procedures_defnoreturn'></block></xml>", name: "X"},
@@ -116,14 +116,23 @@ Ext.define('openHAB.automation.ruleProperties', {
         var toolbar = Ext.create('Ext.toolbar.Toolbar', {
             items: [
                 {
-                    icon: 'information-balloon.png',
-                    itemId: 'show',
-                    text: "Show XML",
+                    icon: 'images/cross.png',
+                    itemId: 'cancel',
+                    text: language.cancel,
                     cls: 'x-btn-icon',
-                    disabled: false,
-                    tooltip: "Save the workspace",
+                    disabled: true,
+                    tooltip: language.rule_DrawCancelTip,
                     handler: function () {
-                       // helpWindow.show();
+                    }
+                },
+                {
+                    icon: 'images/disk.png',
+                    itemId: 'save',
+                    text: language.save,
+                    cls: 'x-btn-icon',
+                    disabled: true,
+                    tooltip: language.rule_DrawSaveTip,
+                    handler: function () {
                     }
                 }
             ]
@@ -131,15 +140,20 @@ Ext.define('openHAB.automation.ruleProperties', {
 
         var blockly = Ext.create('Ext.ux.blockly.Blockly', {
             tbar: toolbar,
-            toolbox: true,
-            collapse: true,
-            toolboxCategories: categoryArray,
-            toolboxTools: toolArray,
-            trashcan: true,
-            blocks: ""//"<xml>"+document.getElementById('go').innerHTML+"</xml>"
+            blockly: {
+                toolbox: true,
+                collapse: true,
+                toolboxCategories: categoryArray,
+                toolboxTools: toolArray,
+                trashcan: true,
+                blocks: "",
+                path: 'js/extux/blockly/'
+            }
         });
 
         this.items = blockly;
+
+        this.callParent();
     }
 })
 ;
