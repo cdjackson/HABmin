@@ -67,6 +67,7 @@ Ext.Loader.setConfig({
         'Ext.ux': 'js/extux',
         'Ext.ux.window': 'js/extux/notification',
         'Ext.ux.aceeditor': 'js/extux/aceeditor',
+        'Ext.ux.blockly': 'js/extux/blockly',
         'Ext.ux.grid': 'js/extux/grid',
         'openHAB': 'app'
     }

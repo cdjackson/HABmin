@@ -605,6 +605,11 @@ var language = {
     // automation/ruleProperties.js
     rule_DrawSaveTip: "Save changes to the rule",
     rule_DrawCancelTip: "Cancel the changes made to the rule",
+    rule_DrawToolboxLogic: "Logic",
+    rule_DrawToolboxLoops: "Loops",
+    rule_DrawToolboxMath: "Math",
+    rule_DrawToolboxItems: "Items",
+    rule_DrawToolboxFunctions: "Functions",
 
     // automation/ruleLibrary.js
     rule_LibraryTitle: "Rule Library",

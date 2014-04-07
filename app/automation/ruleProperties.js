@@ -37,10 +37,10 @@
 
 
 Ext.define('openHAB.automation.ruleProperties', {
-    extend:'Ext.panel.Panel',
-    layout:'fit',
+    extend:'Ext.ux.blockly.Blockly',
     tabTip:'Rule Properties',
     header:false,
+    border:false,
 
     initComponent:function () {
         var ruleTriggerTypeArray = [
@@ -100,8 +100,11 @@ Ext.define('openHAB.automation.ruleProperties', {
         ruleTriggerTypeStore.loadData(ruleTriggerTypeArray);
 
         var categoryArray = [
-            {name: "Procedures", tooltip: "Hello there"},
-            {name: "Math", icon: "images/sum.png", tooltip: "Hello there math"}
+            {name: "Logic", title: language.rule_DrawToolboxLogic, icon: "images/sum.png"},
+            {name: "Loops", title: language.rule_DrawToolboxLoops, icon: "images/edit-indent.png"},
+            {name: "Math", title: language.rule_DrawToolboxMath, icon: "images/edit-mathematics.png"},
+            {name: "Items", title: language.rule_DrawToolboxItems, icon: "images/edit-list.png"},
+            {name: "Functions", title: language.rule_DrawToolboxFunctions, icon: "images/edit-code.png"}
         ];
         var toolArray = [
             {category: "Procedures", block: "<xml><block type='procedures_defnoreturn'></block></xml>", name: "X"},
@@ -138,20 +141,16 @@ Ext.define('openHAB.automation.ruleProperties', {
             ]
         });
 
-        var blockly = Ext.create('Ext.ux.blockly.Blockly', {
-            tbar: toolbar,
-            blockly: {
-                toolbox: true,
+        this.tbar = toolbar;
+        this.blockly = {
+            toolbox: true,
                 collapse: true,
                 toolboxCategories: categoryArray,
                 toolboxTools: toolArray,
                 trashcan: true,
                 blocks: "",
                 path: 'js/extux/blockly/'
-            }
-        });
-
-        this.items = blockly;
+        };
 
         this.callParent();
     }
