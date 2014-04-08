@@ -39,20 +39,20 @@ Ext.define('Ext.ux.blockly.Blockly', {
                         {name: 'name'}
                     ]
                 });
-/*
-                // If we specify a category that matches the block categories
-                // Then we load up all the blocks...
-                if(me.blockly.toolboxTools[t].block == null) {
-                    // Loop through the blocks list
-                    for (var blkName in Blockly.Blocks) {
-                        if(blkName.substring(0, me.blockly.toolboxCategories[i].name.length) == me.blockly.toolboxCategories[i].name) {
-                            var block = {};
-                            block.category = me.blockly.toolboxCategories[i].name;
-                            block.block
-                            store.add(block);
-                        }
-                    }
-                }*/
+                /*
+                 // If we specify a category that matches the block categories
+                 // Then we load up all the blocks...
+                 if(me.blockly.toolboxTools[t].block == null) {
+                 // Loop through the blocks list
+                 for (var blkName in Blockly.Blocks) {
+                 if(blkName.substring(0, me.blockly.toolboxCategories[i].name.length) == me.blockly.toolboxCategories[i].name) {
+                 var block = {};
+                 block.category = me.blockly.toolboxCategories[i].name;
+                 block.block
+                 store.add(block);
+                 }
+                 }
+                 }*/
 
                 // Load any blocks specified in the toolboxTool array
                 // These will be added to any from the categories
@@ -101,12 +101,13 @@ Ext.define('Ext.ux.blockly.Blockly', {
                                 getDragData: function (e) {
                                     var sourceEl = e.getTarget("svg", 10);
                                     if (sourceEl) {
-                                        var d = sourceEl.cloneNode(true);
-                                        d.id = Ext.id();
+                                        var dragView = sourceEl.cloneNode(true);
+                                        dragView.style.width=dragView.getAttribute("width");
+                                        dragView.id = Ext.id();
                                         return grid.dragData = {
                                             sourceEl: sourceEl,
                                             repairXY: Ext.fly(sourceEl).getXY(),
-                                            ddel: d,
+                                            ddel: dragView,
                                             block: me.selectedRecord.get("block")
                                         };
                                     }
@@ -170,7 +171,6 @@ Ext.define('Ext.ux.blockly.Blockly', {
             region: 'center',
             tbar: tbar,
             layout: 'fit',
-            border: me.border,
             flex: 4,
             listeners: {
                 afterrender: function () {
@@ -241,7 +241,8 @@ Ext.define('Ext.ux.blockly.Blockly', {
                         else {
                             var block = Blockly.Xml.domToBlock(Blockly.mainWorkspace, blockXml.childNodes[0]);
 
-                            var svg = '<svg height="' + block.getHeightWidth().height + '">' + block.getSvgRoot().outerHTML + "</svg>";
+                            var svg = '<svg style="height:' + block.getHeightWidth().height + 'px;width=' + block.getHeightWidth().width + 'px;">' + block.getSvgRoot().outerHTML + "</svg>";
+                            var svg = '<svg height="' + block.getHeightWidth().height + '" width="' + block.getHeightWidth().width + '">' + block.getSvgRoot().outerHTML + "</svg>";
                             record.set('svg', svg);
 
                             Blockly.mainWorkspace.clear();
