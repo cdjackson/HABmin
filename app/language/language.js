@@ -610,6 +610,7 @@ var language = {
     rule_DrawToolboxMath: "Math",
     rule_DrawToolboxItems: "Items",
     rule_DrawToolboxFunctions: "Functions",
+    rule_DrawToolboxLibrary: "Library",
 
     // automation/ruleLibrary.js
     rule_LibraryTitle: "Rule Library",

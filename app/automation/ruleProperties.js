@@ -104,16 +104,35 @@ Ext.define('openHAB.automation.ruleProperties', {
             {name: "Loops", title: language.rule_DrawToolboxLoops, icon: "images/edit-indent.png"},
             {name: "Math", title: language.rule_DrawToolboxMath, icon: "images/edit-mathematics.png"},
             {name: "Items", title: language.rule_DrawToolboxItems, icon: "images/edit-list.png"},
-            {name: "Functions", title: language.rule_DrawToolboxFunctions, icon: "images/edit-code.png"}
+            {name: "Functions", title: language.rule_DrawToolboxFunctions, icon: "images/edit-code.png"},
+            {name: "Library", title: language.rule_DrawToolboxLibrary, icon: "images/book-open.png"}
         ];
         var toolArray = [
-            {category: "Procedures", block: "<xml><block type='procedures_defnoreturn'></block></xml>", name: "X"},
-            {category: "Procedures", block: "<xml><block type='procedures_ifreturn'></block></xml>", name: "X"},
-            {category: "Procedures", block: "<xml><block type='controls_if'></block></xml>", name: "X"},
-            {category: "Math", block: "<xml><block type='controls_if'><mutation elseif='1'></mutation></block></xml>", name: "X"},
-            {category: "Procedures", block: "<xml><block type='math_arithmetic'></block></xml>", name: "X"},
-            {category: "Math", block: "<xml><block type='controls_repeat_ext'></block></xml>", name: "X"},
-            {category: "Math", block: "<xml><block type='variables_set'></block></xml>", name: "X"}
+            {category: "Logic", block: "<xml><block type='controls_if'></block></xml>"},
+            {category: "Logic", block: "<xml><block type='logic_compare'></block></xml>"},
+            {category: "Logic", block: "<xml><block type='logic_operation'></block></xml>"},
+            {category: "Logic", block: "<xml><block type='logic_negate'></block></xml>"},
+            {category: "Logic", block: "<xml><block type='logic_boolean'></block></xml>"},
+            {category: "Logic", block: "<xml><block type='logic_ternary'></block></xml>"},
+            {category: "Loops", block: "<xml><block type='controls_whileUntil'></block></xml>"},
+            {category: "Loops", block: "<xml><block type='controls_repeat_ext'></block></xml>"},
+            {category: "Loops", block: "<xml><block type='controls_for'></block></xml>"},
+            {category: "Loops", block: "<xml><block type='controls_forEach'></block></xml>"},
+            {category: "Loops", block: "<xml><block type='controls_flow_statements'></block></xml>"},
+            {category: "Math", block: "<xml><block type='math_number'></block></xml>"},
+            {category: "Math", block: "<xml><block type='math_arithmetic'></block></xml>"},
+            {category: "Math", block: "<xml><block type='math_single'></block></xml>"},
+            {category: "Math", block: "<xml><block type='math_trig'></block></xml>"},
+            {category: "Math", block: "<xml><block type='math_constant'></block></xml>"},
+            {category: "Math", block: "<xml><block type='math_number_property'></block></xml>"},
+            {category: "Math", block: "<xml><block type='math_change'></block></xml>"},
+            {category: "Math", block: "<xml><block type='math_round'></block></xml>"},
+            {category: "Math", block: "<xml><block type='math_modulo'></block></xml>"},
+            {category: "Math", block: "<xml><block type='math_constrain'></block></xml>"},
+            {category: "Math", block: "<xml><block type='math_random_int'></block></xml>"},
+            {category: "Items", block: "<xml><block type='variables_set'></block></xml>"},
+            {category: "Items", block: "<xml><block type='variables_get'></block></xml>"},
+            {category: "Functions", block: "<xml><block type='procedures_ifreturn'></block></xml>"}
         ];
 
         var toolbar = Ext.create('Ext.toolbar.Toolbar', {
