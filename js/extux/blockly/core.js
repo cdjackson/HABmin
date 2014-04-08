@@ -5903,8 +5903,8 @@ Blockly.Css.CONTENT = [
 
     '.blocklyText {',
     '  cursor: default;',
-    '  font-family: sans-serif;',
-    '  font-size: 11pt;',
+    '  font-family: tahoma,arial,verdana,sans-serif;',
+    '  font-size: 9pt;',
     '  fill: #fff;',
     '}',
 
@@ -6069,98 +6069,6 @@ Blockly.Css.CONTENT = [
     '  stroke: #f00;',
     '  stroke-width: 2;',
     '  stroke-linecap: round;',
-    '}',
-
-    '.blocklyDropdownMenu {',
-    '  padding: 0 !important;',
-    '}',
-
-    /* Category tree in Toolbox. */
-    '.blocklyToolboxDiv {',
-    '  background-color: #ddd;',
-    '  display: none;',
-    '  overflow-x: visible;',
-    '  overflow-y: auto;',
-    '  position: absolute;',
-    '}',
-
-    '.blocklyTreeRoot {',
-    '  padding: 4px 0;',
-    '}',
-
-    '.blocklyTreeRoot:focus {',
-    '  outline: none;',
-    '}',
-
-    '.blocklyTreeRow {',
-    '  line-height: 22px;',
-    '  height: 22px;',
-    '  padding-right: 1em;',
-    '  white-space: nowrap;',
-    '}',
-
-    '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {',
-    '  padding-right: 0;',
-    '  padding-left: 1em !important;',
-    '}',
-
-    '.blocklyTreeRow:hover {',
-    '  background-color: #e4e4e4;',
-    '}',
-
-    '.blocklyTreeIcon {',
-    '  height: 16px;',
-    '  width: 16px;',
-    '  vertical-align: middle;',
-    '  background-image: url(<<<PATH>>>/media/tree.png);',
-    '}',
-
-    '.blocklyTreeIconClosedLtr {',
-    '  background-position: -32px -1px;',
-    '}',
-
-    '.blocklyTreeIconClosedRtl {',
-    '  background-position: 0px -1px;',
-    '}',
-
-    '.blocklyTreeIconOpen {',
-    '  background-position: -16px -1px;',
-    '}',
-
-    '.blocklyTreeIconNone {',
-    '  background-position: -48px -1px;',
-    '}',
-
-    '.blocklyTreeSelected>.blocklyTreeIconClosedLtr {',
-    '  background-position: -32px -17px;',
-    '}',
-
-    '.blocklyTreeSelected>.blocklyTreeIconClosedRtl {',
-    '  background-position: 0px -17px;',
-    '}',
-
-    '.blocklyTreeSelected>.blocklyTreeIconOpen {',
-    '  background-position: -16px -17px;',
-    '}',
-
-    '.blocklyTreeSelected>.blocklyTreeIconNone {',
-    '  background-position: -48px -17px;',
-    '}',
-
-    '.blocklyTreeLabel {',
-    '  cursor: default;',
-    '  font-family: sans-serif;',
-    '  font-size: 16px;',
-    '  padding: 0 3px;',
-    '  vertical-align: middle;',
-    '}',
-
-    '.blocklyTreeSelected  {',
-    '  background-color: #57e !important;',
-    '}',
-
-    '.blocklyTreeSelected .blocklyTreeLabel {',
-    '  color: #fff;',
     '}',
 
     ''
@@ -9479,7 +9387,7 @@ Blockly.Mutator.prototype.createIcon = function () {
         {'class': 'blocklyIconMark',
             'x': Blockly.Icon.RADIUS,
             'y': 2 * Blockly.Icon.RADIUS - 4}, this.iconGroup_);
-    this.iconMark_.appendChild(document.createTextNode('\u2605'));
+    this.iconMark_.appendChild(document.createTextNode('\u2699'));
 };
 
 /**

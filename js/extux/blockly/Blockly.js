@@ -241,8 +241,7 @@ Ext.define('Ext.ux.blockly.Blockly', {
                         else {
                             var block = Blockly.Xml.domToBlock(Blockly.mainWorkspace, blockXml.childNodes[0]);
 
-                            var svg = '<svg style="height:' + block.getHeightWidth().height + 'px;width=' + block.getHeightWidth().width + 'px;">' + block.getSvgRoot().outerHTML + "</svg>";
-                            var svg = '<svg height="' + block.getHeightWidth().height + '" width="' + block.getHeightWidth().width + '">' + block.getSvgRoot().outerHTML + "</svg>";
+                            var svg = '<svg height="' + block.getHeightWidth().height + '" width="' + (block.getHeightWidth().width + 10) + '"><g transform=\"translate(10)\">' + block.getSvgRoot().outerHTML + "</g></svg>";
                             record.set('svg', svg);
 
                             Blockly.mainWorkspace.clear();
