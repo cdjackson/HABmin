@@ -132,6 +132,7 @@ Ext.define('openHAB.automation.ruleProperties', {
             {category: "Math", block: "<xml><block type='math_random_int'></block></xml>"},
             {category: "Items", block: "<xml><block type='variables_set'></block></xml>"},
             {category: "Items", block: "<xml><block type='variables_get'></block></xml>"},
+            {category: "Items", block: "<xml><block type='persistence_get'></block></xml>"},
             {category: "Functions", block: "<xml><block type='procedures_ifreturn'></block></xml>"}
         ];
 
