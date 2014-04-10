@@ -40,15 +40,74 @@ Ext.define('openHAB.automation.ruleList', {
     extend: 'Ext.panel.Panel',
     layout: 'fit',
     icon: 'images/application-list.png',
+    items:[],
 
     initComponent: function () {
         this.title = language.rule_ListTitle;
+
+        var me = this;
+
+        var toolbar = Ext.create('Ext.toolbar.Toolbar', {
+            items: [
+                {
+                    icon: 'images/minus-button.png',
+                    itemId: 'delete',
+                    text: language.delete,
+                    cls: 'x-btn-icon',
+//                    disabled: true,
+                    tooltip: language.rule_ListDeleteTip,
+                    handler: function () {
+                        Ext.getCmp('automationPropertyContainer').removeProperty();
+                        return;
+
+                        // Get the item name to delete
+                        var record = ruleList.getSelectionModel().getSelection()[0];
+                        if (record == null)
+                            return;
+
+                        // Make sure we really want to do this!!!
+                        var ruleName = record.get('name');
+                        Ext.Msg.show({
+                            title: language.config_ItemListConfirmDeleteTitle,
+                            msg: sprintf(language.config_ItemListConfirmDeleteMsg, ruleName),
+                            buttons: Ext.Msg.YESNO,
+                            config: {
+                                obj: this,
+                                name: ruleName
+                            },
+                            fn: deleteRule,
+                            icon: Ext.MessageBox.QUESTION
+                        });
+                    }
+                },
+                {
+                    icon: 'images/plus-button.png',
+                    itemId: 'add',
+                    text: language.add,
+                    cls: 'x-btn-icon',
+                    disabled: false,
+                    tooltip: language.rule_ListAddTip,
+                    handler: function () {
+                        var ruleDesigner = Ext.create('openHAB.automation.ruleProperties', {
+                            blockly: {
+                                blocks: '<xml><block type="procedures_defnoreturn" deletable="false" movable="false"><field name="NAME">New Rule</field></block></xml>'
+                            }
+                        });
+
+                        if(ruleDesigner == null)
+                            return;
+
+                        Ext.getCmp('automationPropertyContainer').setNewProperty(ruleDesigner);
+                    }
+                }
+            ]
+        });
 
         var ruleList = Ext.create('Ext.grid.Panel', {
             store: ruleStore,
             header: false,
             split: true,
-//            tbar:toolbar,
+            tbar:toolbar,
             collapsible: false,
             multiSelect: false,
             columns: [
