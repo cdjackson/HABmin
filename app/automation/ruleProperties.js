@@ -41,6 +41,7 @@ Ext.define('openHAB.automation.ruleProperties', {
     tabTip:'Rule Properties',
     header:false,
     border:false,
+    autoDestroy: true,
 
     initComponent:function () {
         var ruleTriggerTypeArray = [
@@ -162,15 +163,15 @@ Ext.define('openHAB.automation.ruleProperties', {
         });
 
         this.tbar = toolbar;
-        this.blockly = {
-            toolbox: true,
-                collapse: true,
-                toolboxCategories: categoryArray,
-                toolboxTools: toolArray,
-                trashcan: true,
-                blocks: "",
-                path: 'js/extux/blockly/'
-        };
+        if(this.blockly == null)
+            this.blockly = {};
+
+        this.blockly.toolbox = true;
+        this.blockly.collapse = true;
+        this.blockly.toolboxCategories = categoryArray;
+        this.blockly.toolboxTools = toolArray;
+        this.blockly.trashcan = true;
+        this.blockly.path = 'js/extux/blockly/';
 
         this.callParent();
     }
