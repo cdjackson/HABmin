@@ -41,7 +41,7 @@ Blockly.Blocks['persistence_get'] = {
         this.appendValueInput("ITEM")
             .setCheck("String")
             .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField(new Blockly.FieldDropdown([["value", "VALUE"], ["average", "AVERAGE"], ["minimum", "MINIMUM"], ["maximum", "MAXIMUM"]]), "TYPE")
+            .appendField(new Blockly.FieldDropdown([["state", "STATE"], ["average", "AVERAGE"], ["minimum", "MINIMUM"], ["maximum", "MAXIMUM"]]), "TYPE")
             .appendField("of item");
         this.appendValueInput("DAYS")
             .setCheck("Number")
@@ -59,7 +59,7 @@ Blockly.Blocks['persistence_get'] = {
             .setCheck("Number")
             .setAlign(Blockly.ALIGN_RIGHT)
             .appendField("seconds");
-        this.setOutput(true, "String");
+        this.setOutput(true, ["Number", "String"]);
         this.setTooltip('');
     }
 
