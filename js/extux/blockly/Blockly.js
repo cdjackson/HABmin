@@ -13,8 +13,8 @@ Ext.define('Ext.ux.blockly.Blockly', {
     toolbox: null,
     trashcan: true,
     header: false,
-    items: [],
     selectedRecord: null,
+    autoDestroy: true,
 
     initComponent: function () {
         var me = this;
@@ -24,6 +24,8 @@ Ext.define('Ext.ux.blockly.Blockly', {
         // Avoid undeclared error
         if(me.blockly == null)
             me.blockly = {};
+
+        this.items = [];
 
         if (me.blockly.toolbox == true) {
             // Create an array of category stores and grids.
@@ -39,20 +41,7 @@ Ext.define('Ext.ux.blockly.Blockly', {
                         {name: 'name'}
                     ]
                 });
-                /*
-                 // If we specify a category that matches the block categories
-                 // Then we load up all the blocks...
-                 if(me.blockly.toolboxTools[t].block == null) {
-                 // Loop through the blocks list
-                 for (var blkName in Blockly.Blocks) {
-                 if(blkName.substring(0, me.blockly.toolboxCategories[i].name.length) == me.blockly.toolboxCategories[i].name) {
-                 var block = {};
-                 block.category = me.blockly.toolboxCategories[i].name;
-                 block.block
-                 store.add(block);
-                 }
-                 }
-                 }*/
+
 
                 // Load any blocks specified in the toolboxTool array
                 // These will be added to any from the categories
@@ -88,10 +77,10 @@ Ext.define('Ext.ux.blockly.Blockly', {
                     listeners: {
                         render: function (grid) {
                             // TODO: This doesn't work!
-                            Ext.create('Ext.tip.ToolTip', {
-                                target: grid.getHeader(),
-                                html: grid.tooltip
-                            });
+//                            Ext.create('Ext.tip.ToolTip', {
+//                                target: grid.getHeader(),
+//                                html: grid.tooltip
+//                            });
 
                             grid.dragZone = Ext.create('Ext.dd.DragZone', grid.getEl(), {
                                 // On receipt of a mousedown event, see if it is within a draggable element.
@@ -130,7 +119,7 @@ Ext.define('Ext.ux.blockly.Blockly', {
                                 return;
 
                             var block = Blockly.Xml.textToDom(record.get("block"));
-                            Blockly.Xml.domToBlock(Blockly.mainWorkspace, block.childNodes[0]);
+                            Blockly.Xml.domToBlock(Blockly.getMainWorkspace(), block.childNodes[0]);
                         }
                     }
                 });
@@ -143,6 +132,7 @@ Ext.define('Ext.ux.blockly.Blockly', {
                 split: true,
                 border: true,
                 region: 'west',
+                autoDestroy: true,
                 flex: 1,
                 preventHeader: true,
                 layout: {
@@ -172,6 +162,7 @@ Ext.define('Ext.ux.blockly.Blockly', {
             tbar: tbar,
             layout: 'fit',
             flex: 4,
+            autoDestroy: true,
             listeners: {
                 afterrender: function () {
                     renderBlockly();
@@ -226,7 +217,7 @@ Ext.define('Ext.ux.blockly.Blockly', {
                             return false;
 
                         var block = Blockly.Xml.textToDom(data.block);
-                        Blockly.Xml.domToBlock(Blockly.mainWorkspace, block.childNodes[0]);
+                        Blockly.Xml.domToBlock(Blockly.getMainWorkspace(), block.childNodes[0]);
                         return true;
                     }
                 });
@@ -239,12 +230,12 @@ Ext.define('Ext.ux.blockly.Blockly', {
                             console.log("Unable to load block '" + record.get("block") + "'.");
                         }
                         else {
-                            var block = Blockly.Xml.domToBlock(Blockly.mainWorkspace, blockXml.childNodes[0]);
+                            var block = Blockly.Xml.domToBlock(Blockly.getMainWorkspace(), blockXml.childNodes[0]);
 
                             var svg = '<svg height="' + block.getHeightWidth().height + '" width="' + (block.getHeightWidth().width + 10) + '"><g transform=\"translate(10)\">' + block.getSvgRoot().outerHTML + "</g></svg>";
                             record.set('svg', svg);
 
-                            Blockly.mainWorkspace.clear();
+                            Blockly.getMainWorkspace().clear();
                         }
                     }, me);
                 }
@@ -255,13 +246,23 @@ Ext.define('Ext.ux.blockly.Blockly', {
                 me.setBlocks(me.blockly.blocks);
         }
     },
+    listeners: {
+        beforedestroy: function(panel) {
+            if(Blockly != null && Blockly.getMainWorkspace() != null)
+                Blockly.getMainWorkspace().dispose();
+            panel.removeAll(true);
+        }
+    },
     setBlocks: function (blocks) {
-        Blockly.mainWorkspace.clear();
+        // Clear any existing workspace
+        if(Blockly.getMainWorkspace() != null)
+            Blockly.getMainWorkspace().clear();
+
         var xml = Blockly.Xml.textToDom(blocks);
-        Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+        Blockly.Xml.domToWorkspace(Blockly.getMainWorkspace(), xml);
     },
     getBlocks: function (readable) {
-        var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+        var xml = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace());
         if (readable == true)
             return Blockly.Xml.domToPrettyText(xml);
         else

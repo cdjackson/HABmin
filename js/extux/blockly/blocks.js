@@ -1,4 +1,4 @@
-/*! ExtBlockly 2014-04-08 */
+/*! ExtBlockly 2014-04-10 */
 /**
  * @license
  * Visual Blocks Editor
@@ -1291,10 +1291,8 @@ Blockly.Blocks['controls_for'] = {
         var option = {enabled: true};
         var name = this.getFieldValue('VAR');
         option.text = Blockly.Msg.VARIABLES_SET_CREATE_GET.replace('%1', name);
-        //var xmlField = goog.dom.createDom('field', null, name);
         var xmlField = Ext.DomHelper.createDom({tag: "field", children: name})
         xmlField.setAttribute('name', 'VAR');
-        //var xmlBlock = goog.dom.createDom('block', null, xmlField);
         var xmlBlock = Ext.DomHelper.createDom({tag: "block", children: xmlField})
         xmlBlock.setAttribute('type', 'variables_get');
         option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
@@ -2078,17 +2076,13 @@ Blockly.Blocks['procedures_defnoreturn'] = {
         var name = this.getFieldValue('NAME');
         option.text = Blockly.Msg.PROCEDURES_CREATE_DO.replace('%1', name);
 
-//    var xmlMutation = goog.dom.createDom('mutation');
         var xmlMutation = Ext.DomHelper.createDom({tag: "mutation"})
-
         xmlMutation.setAttribute('name', name);
         for (var x = 0; x < this.arguments_.length; x++) {
-//      var xmlArg = goog.dom.createDom('arg');
             var xmlArg = Ext.DomHelper.createDom({tag: "arg"})
             xmlArg.setAttribute('name', this.arguments_[x]);
             xmlMutation.appendChild(xmlArg);
         }
-//    var xmlBlock = goog.dom.createDom('block', null, xmlMutation);
         var xmlBlock = Ext.DomHelper.createDom({tag: "block", children: xmlMutation})
         xmlBlock.setAttribute('type', this.callType_);
         option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
@@ -2099,10 +2093,8 @@ Blockly.Blocks['procedures_defnoreturn'] = {
             var option = {enabled: true};
             var name = this.arguments_[x];
             option.text = Blockly.Msg.VARIABLES_SET_CREATE_GET.replace('%1', name);
-            //var xmlField = goog.dom.createDom('field', null, name);
             var xmlField = Ext.DomHelper.createDom({tag: "field", children: name})
             xmlField.setAttribute('name', 'VAR');
-            //var xmlBlock = goog.dom.createDom('block', null, xmlField);
             var xmlBlock = Ext.DomHelper.createDom({tag: "block", children: xmlField})
             xmlBlock.setAttribute('type', 'variables_get');
             option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
@@ -2549,13 +2541,26 @@ Blockly.Blocks['text'] = {
         this.setHelpUrl(Blockly.Msg.TEXT_TEXT_HELPURL);
         this.setColour(160);
         this.appendDummyInput()
-            .appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
-                'media/quote0.png', 12, 12, '"'))
+            .appendField(this.newQuote_(true))
             .appendField(new Blockly.FieldTextInput(''), 'TEXT')
-            .appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
-                'media/quote1.png', 12, 12, '"'));
+            .appendField(this.newQuote_(false));
         this.setOutput(true, 'String');
         this.setTooltip(Blockly.Msg.TEXT_TEXT_TOOLTIP);
+    },
+    /**
+     * Create an image of an open or closed quote.
+     * @param {boolean} open True if open quote, false if closed.
+     * @return {!Blockly.FieldImage} The field image of the quote.
+     * @private
+     */
+    newQuote_: function (open) {
+        if (open == Blockly.RTL) {
+            var file = 'quote1.png';
+        } else {
+            var file = 'quote0.png';
+        }
+        return new Blockly.FieldImage(Blockly.pathToBlockly + 'media/' + file,
+            12, 12, '"');
     }
 };
 
@@ -3101,11 +3106,9 @@ Blockly.Blocks['text_prompt'] = {
         });
         this.appendDummyInput()
             .appendField(dropdown, 'TYPE')
-            .appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
-                'media/quote0.png', 12, 12, '"'))
+            .appendField(this.newQuote_(true))
             .appendField(new Blockly.FieldTextInput(''), 'TEXT')
-            .appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
-                'media/quote1.png', 12, 12, '"'));
+            .appendField(this.newQuote_(false));
         this.setOutput(true, 'String');
         // Assign 'this' to a variable for use in the tooltip closure below.
         var thisBlock = this;
@@ -3114,7 +3117,8 @@ Blockly.Blocks['text_prompt'] = {
                 Blockly.Msg.TEXT_PROMPT_TOOLTIP_TEXT :
                 Blockly.Msg.TEXT_PROMPT_TOOLTIP_NUMBER;
         });
-    }
+    },
+    newQuote_: Blockly.Blocks['text'].newQuote_
 };
 
 /**
