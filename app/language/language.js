@@ -620,6 +620,8 @@ var language = {
     rule_ListTitle: "Rules",
     rule_ListItem: "Item",
     rule_ListRule: "Rule",
+    rule_ListDeleteTip: "Delete the selected rule",
+    rule_ListAddTip: "Add a new rule",
 
     // automation/notificationList.js
     notification_ListTitle: "Notifications"
