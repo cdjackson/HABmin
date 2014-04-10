@@ -54,7 +54,7 @@ Ext.define('openHAB.automation.ruleList', {
                     itemId: 'delete',
                     text: language.delete,
                     cls: 'x-btn-icon',
-//                    disabled: true,
+                    disabled: true,
                     tooltip: language.rule_ListDeleteTip,
                     handler: function () {
                         Ext.getCmp('automationPropertyContainer').removeProperty();
