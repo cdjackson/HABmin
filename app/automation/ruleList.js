@@ -90,7 +90,7 @@ Ext.define('openHAB.automation.ruleList', {
                     handler: function () {
                         var ruleDesigner = Ext.create('openHAB.automation.ruleProperties', {
                             blockly: {
-                                blocks: '<xml><block type="procedures_defnoreturn" deletable="false" movable="false"><field name="NAME">New Rule</field></block></xml>'
+                                blocks: '<xml><block type="procedures_defnoreturn" deletable="false" movable="false" editable="false"><field name="NAME">New Rule</field></block></xml>'
                             }
                         });
 
