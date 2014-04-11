@@ -68,8 +68,8 @@ Ext.define('openHAB.automation.ruleList', {
                         // Make sure we really want to do this!!!
                         var ruleName = record.get('name');
                         Ext.Msg.show({
-                            title: language.config_ItemListConfirmDeleteTitle,
-                            msg: sprintf(language.config_ItemListConfirmDeleteMsg, ruleName),
+                            title: language.rule_ListConfirmDeleteTitle,
+                            msg: sprintf(language.rule_ListConfirmDeleteMsg, ruleName),
                             buttons: Ext.Msg.YESNO,
                             config: {
                                 obj: this,
@@ -90,7 +90,7 @@ Ext.define('openHAB.automation.ruleList', {
                     handler: function () {
                         var ruleDesigner = Ext.create('openHAB.automation.ruleProperties', {
                             blockly: {
-                                blocks: '<xml><block type="procedures_defnoreturn" deletable="false" movable="false" editable="false"><field name="NAME">New Rule</field></block></xml>'
+                                blocks: '<xml><block type="procedures_defnoreturn" deletable="false" movable="false"><field name="NAME">New Rule</field></block></xml>'
                             }
                         });
 
@@ -112,36 +112,8 @@ Ext.define('openHAB.automation.ruleList', {
             multiSelect: false,
             columns: [
                 {
-                    text: language.rule_ListItem,
-                    flex: 3,
-                    dataIndex: 'item'
-                    /*,
-                     renderer:function (value, metadata, record) {
-                     var icon = "";
-                     var ref = itemConfigStore.findExact("name", value);
-                     if (ref != -1) {
-                     if (itemConfigStore.getAt(ref).get('icon') != "")
-                     icon = '<img src="../images/' + itemConfigStore.getAt(ref).get('icon') + '.png" align="left" height="16">';
-                     }
-
-                     return '<div>' + icon + '</div><div style="margin-left:20px">' + value + '</div>';
-                     }*/
-                },
-                {
-                    text: language.rule_ListRule,
-                    flex: 4,
-                    dataIndex: 'label'
-                    /*,
-                     renderer:function (value, metadata, record, row, col, store, gridView) {
-                     var img = '';
-                     if (record.get("persistence") != null) {
-                     var services = record.get("persistence");
-                     if (services != "")
-                     img = '<img src="images/database-small.png">';
-                     }
-
-                     return '<span>' + value + '</span><span style="float:right">' + img + '</span>';
-                     }*/
+                    flex: 1,
+                    dataIndex: 'rule'
                 }
             ],
             listeners: {
@@ -153,6 +125,35 @@ Ext.define('openHAB.automation.ruleList', {
         this.items = ruleList;
 
         this.callParent();
+
+
+        function deleteRule(button, text, options) {
+            if (button !== 'yes')
+                return;
+
+            // Tell OH to Remove the item
+            Ext.Ajax.request({
+                url: HABminBaseURL + "/config/items/" + options.config.name,
+                headers: {'Accept': 'application/json'},
+                method: 'DELETE',
+                success: function (response, opts) {
+                    handleStatusNotification(NOTIFICATION_OK, sprintf(language.config_ItemListDeleted, options.config.name));
+                },
+                failure: function (result, request) {
+                    handleStatusNotification(NOTIFICATION_ERROR, sprintf(language.config_ItemListDeleteError, options.config.name));
+                },
+                callback: function (options, success, response) {
+                    // Reload the store
+//                    itemConfigStore.reload();
+
+                    // Disable delete
+                    toolbar.getComponent('delete').disable();
+
+                    // Clear the item properties
+//                    Ext.getCmp('configPropertyContainer').removeProperty();
+                }
+            });
+        }
     }
 })
 ;

@@ -37,13 +37,16 @@
 
 
 Ext.define('openHAB.automation.ruleProperties', {
-    extend:'Ext.ux.blockly.Blockly',
-    tabTip:'Rule Properties',
-    header:false,
-    border:false,
+    extend: 'Ext.ux.blockly.Blockly',
+    tabTip: 'Rule Properties',
+    header: false,
+    border: false,
     autoDestroy: true,
+    ruleId: 0,
 
-    initComponent:function () {
+    initComponent: function () {
+        var me=this;
+
         var ruleTriggerTypeArray = [
             {id: 0, label: 'Item command was received ...'},
             {id: 1, label: 'Item state was updated ...'},
@@ -92,21 +95,21 @@ Ext.define('openHAB.automation.ruleProperties', {
         ];
 
         var ruleTriggerTypeStore = Ext.create('Ext.data.Store', {
-            storeId:'ruleTriggerType',
-            fields:[
-                {type:'number', name:'id'},
-                {type:'text', name:'label'}
+            storeId: 'ruleTriggerType',
+            fields: [
+                {type: 'number', name: 'id'},
+                {type: 'text', name: 'label'}
             ]
         });
         ruleTriggerTypeStore.loadData(ruleTriggerTypeArray);
 
         var categoryArray = [
-            {name: "Logic", title: language.rule_DrawToolboxLogic, icon: "images/sum.png"},
-            {name: "Loops", title: language.rule_DrawToolboxLoops, icon: "images/edit-indent.png"},
-            {name: "Math", title: language.rule_DrawToolboxMath, icon: "images/edit-mathematics.png"},
-            {name: "Items", title: language.rule_DrawToolboxItems, icon: "images/edit-list.png"},
-            {name: "Functions", title: language.rule_DrawToolboxFunctions, icon: "images/edit-code.png"},
-            {name: "Library", title: language.rule_DrawToolboxLibrary, icon: "images/book-open.png"}
+            {name: "Logic", title: language.rule_DesignerToolboxLogic, icon: "images/sum.png"},
+            {name: "Loops", title: language.rule_DesignerToolboxLoops, icon: "images/edit-indent.png"},
+            {name: "Math", title: language.rule_DesignerToolboxMath, icon: "images/edit-mathematics.png"},
+            {name: "Items", title: language.rule_DesignerToolboxItems, icon: "images/edit-list.png"},
+            {name: "Functions", title: language.rule_DesignerToolboxFunctions, icon: "images/edit-code.png"},
+            {name: "Library", title: language.rule_DesignerToolboxLibrary, icon: "images/book-open.png"}
         ];
         var toolArray = [
             {category: "Logic", block: "<xml><block type='controls_if'></block></xml>"},
@@ -145,7 +148,7 @@ Ext.define('openHAB.automation.ruleProperties', {
                     text: language.cancel,
                     cls: 'x-btn-icon',
                     disabled: true,
-                    tooltip: language.rule_DrawCancelTip,
+                    tooltip: language.rule_DesignerCancelTip,
                     handler: function () {
                     }
                 },
@@ -155,15 +158,38 @@ Ext.define('openHAB.automation.ruleProperties', {
                     text: language.save,
                     cls: 'x-btn-icon',
                     disabled: true,
-                    tooltip: language.rule_DrawSaveTip,
+                    tooltip: language.rule_DesignerSaveTip,
                     handler: function () {
+                        var rule = me.getBlocks();
+                        Ext.Ajax.request({
+                            url: HABminBaseURL + "/config/rules/designer/" + me.ruleId,
+                            headers: {'Accept': 'application/json'},
+                            method: me.ruleId = 0 ? 'POST' : 'PUT',
+                            jsonData: rule,
+                            success: function (response, opts) {
+                                var json = Ext.decode(response.responseText);
+                                if (json == null) {
+                                    handleStatusNotification(NOTIFICATION_ERROR, sprintf(language.rule_DesignerErrorSavingRule, ruleName));
+                                    return;
+                                }
+
+                                // Update the toolbar
+                                toolbar.getComponent('save').disable();
+                                toolbar.getComponent('cancel').disable();
+
+                                handleStatusNotification(NOTIFICATION_OK, sprintf(language.rule_DesignerSaveOk, modelName));
+                            },
+                            failure: function (result, request) {
+                                handleStatusNotification(NOTIFICATION_ERROR, sprintf(language.rule_DesignerErrorSavingRule, modelName));
+                            }
+                        });
                     }
                 }
             ]
         });
 
         this.tbar = toolbar;
-        if(this.blockly == null)
+        if (this.blockly == null)
             this.blockly = {};
 
         this.blockly.toolbox = true;
@@ -172,7 +198,12 @@ Ext.define('openHAB.automation.ruleProperties', {
         this.blockly.toolboxTools = toolArray;
         this.blockly.trashcan = true;
         this.blockly.path = 'js/extux/blockly/';
-
+        this.blockly.listeners = {
+            workspacechanged: function () {
+                toolbar.getComponent('cancel').enable();
+                toolbar.getComponent('save').enable();
+            }
+        };
         this.callParent();
     }
 })
