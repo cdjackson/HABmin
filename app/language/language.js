@@ -603,14 +603,19 @@ var language = {
     rule_EditorErrorNoModel: "Error loading rule model - no model defined",
 
     // automation/ruleProperties.js
-    rule_DrawSaveTip: "Save changes to the rule",
-    rule_DrawCancelTip: "Cancel the changes made to the rule",
-    rule_DrawToolboxLogic: "Logic",
-    rule_DrawToolboxLoops: "Loops",
-    rule_DrawToolboxMath: "Math",
-    rule_DrawToolboxItems: "Items",
-    rule_DrawToolboxFunctions: "Functions",
-    rule_DrawToolboxLibrary: "Library",
+    rule_DesignerSaveTip: "Save changes to the rule",
+    rule_DesignerCancelTip: "Cancel the changes made to the rule",
+    rule_DesignerToolboxLogic: "Logic",
+    rule_DesignerToolboxLoops: "Loops",
+    rule_DesignerToolboxMath: "Math",
+    rule_DesignerToolboxItems: "Items",
+    rule_DesignerToolboxFunctions: "Functions",
+    rule_DesignerToolboxLibrary: "Library",
+    rule_DesignerErrorSavingRule: "Error saving rule",
+    rule_DesignerSaveOk: "Rule saved successfully",
+    rule_ListConfirmDeleteTitle: "Delete Rule",
+    rule_ListConfirmDeleteMsg: "Are you sure you want to delete the rule '%s'",
+
 
     // automation/ruleLibrary.js
     rule_LibraryTitle: "Rule Library",
