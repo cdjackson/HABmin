@@ -40,7 +40,7 @@ Ext.define('openHAB.automation.ruleList', {
     extend: 'Ext.panel.Panel',
     layout: 'fit',
     icon: 'images/application-list.png',
-    items:[],
+    items: [],
 
     initComponent: function () {
         this.title = language.rule_ListTitle;
@@ -90,18 +90,22 @@ Ext.define('openHAB.automation.ruleList', {
                     handler: function () {
                         var ruleDesigner = Ext.create('openHAB.automation.ruleProperties', {
                             blockly: {
-                                blocks: {block:[
-                                    {
-                                        type: 'openhab_rule',
-                                        deletable: false,
-                                        movable: false,
-                                        fields: [{name: "NAME", value: language: rule_DesignerNewRule}]
-                                    }
-                                ]}
+                                blocks: {
+                                    block: [
+                                        {
+                                            type: 'openhab_rule',
+                                            deletable: false,
+                                            movable: false,
+                                            fields: [
+                                                {name: "NAME", value: language.rule_DesignerNewRule}
+                                            ]
+                                        }
+                                    ]
+                                }
                             }
                         });
 
-                        if(ruleDesigner == null)
+                        if (ruleDesigner == null)
                             return;
 
                         Ext.getCmp('automationPropertyContainer').setNewProperty(ruleDesigner);
@@ -114,7 +118,7 @@ Ext.define('openHAB.automation.ruleList', {
             store: ruleStore,
             header: false,
             split: true,
-            tbar:toolbar,
+            tbar: toolbar,
             collapsible: false,
             multiSelect: false,
             columns: [
@@ -144,10 +148,12 @@ Ext.define('openHAB.automation.ruleList', {
                 headers: {'Accept': 'application/json'},
                 method: 'DELETE',
                 success: function (response, opts) {
-                    handleStatusNotification(NOTIFICATION_OK, sprintf(language.config_ItemListDeleted, options.config.name));
+                    handleStatusNotification(NOTIFICATION_OK,
+                        sprintf(language.config_ItemListDeleted, options.config.name));
                 },
                 failure: function (result, request) {
-                    handleStatusNotification(NOTIFICATION_ERROR, sprintf(language.config_ItemListDeleteError, options.config.name));
+                    handleStatusNotification(NOTIFICATION_ERROR,
+                        sprintf(language.config_ItemListDeleteError, options.config.name));
                 },
                 callback: function (options, success, response) {
                     // Reload the store

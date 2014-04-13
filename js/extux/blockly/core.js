@@ -13261,23 +13261,23 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
     }
 
     var inline = jsonBlock.inline;
-    if (inline) {
+    if (inline != null) {
         block.setInputsInline(inline);
     }
     var disabled = jsonBlock.disabled;
-    if (disabled) {
+    if (disabled != null) {
         block.setDisabled(disabled);
     }
     var deletable = jsonBlock.deletable;
-    if (deletable) {
+    if (deletable != null) {
         block.setDeletable(deletable);
     }
     var movable = jsonBlock.movable;
-    if (movable) {
+    if (movable != null) {
         block.setMovable(movable);
     }
     var editable = jsonBlock.editable;
-    if (editable) {
+    if (editable != null) {
         block.setEditable(editable);
     }
 
@@ -13352,8 +13352,8 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
     }
 
     var collapsed = jsonBlock.collapsed;
-    if (collapsed) {
-        block.setCollapsed(collapsed == 'true');
+    if (collapsed != null) {
+        block.setCollapsed(collapsed);
     }
     var next = block.nextConnection && block.nextConnection.targetBlock();
     if (next) {

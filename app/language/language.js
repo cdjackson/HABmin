@@ -611,11 +611,16 @@ var language = {
     rule_DesignerToolboxItems: "Items",
     rule_DesignerToolboxFunctions: "Functions",
     rule_DesignerToolboxLibrary: "Library",
-    rule_DesignerErrorSavingRule: "Error saving rule",
-    rule_DesignerSaveOk: "Rule saved successfully",
+    rule_DesignerErrorSavingRule: "Error saving rule '%s'.",
+    rule_DesignerSaveOk: "Rule '%s' saved successfully.",
     rule_ListConfirmDeleteTitle: "Delete Rule",
     rule_ListConfirmDeleteMsg: "Are you sure you want to delete the rule '%s'",
-
+    rule_DesignerErrorReadingRule: "Error reading rule!",
+    rule_DesignerErrorReadingRuleName: "Error reading rule name!",
+    rule_DesignerIdError: "ID Consistency error saving rule '%s'. Rule may have been duplicated.",
+    rule_DesignerRuleName: "Rule Name:",
+    rule_DesignerRuleTooltip: "Initialises a new openHAB rule. The rule name is set in the box.",
+    rule_DesignerNewRule: "New Rule",
 
     // automation/ruleLibrary.js
     rule_LibraryTitle: "Rule Library",

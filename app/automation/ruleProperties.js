@@ -42,7 +42,7 @@ Ext.define('openHAB.automation.ruleProperties', {
     header: false,
     border: false,
     autoDestroy: true,
-    ruleId: 0,
+    ruleId: null,
 
     initComponent: function () {
         var me = this;
@@ -185,17 +185,23 @@ Ext.define('openHAB.automation.ruleProperties', {
                         }
 
                         // Check that we have a name!
-                        if(ruleName == null || ruleName == "") {
+                        if (ruleName == null || ruleName == "") {
                             handleStatusNotification(NOTIFICATION_ERROR,
                                 sprintf(language.rule_DesignerErrorReadingRuleName));
                             return;
                         }
 
+                        var bean = {};
+                        if(me.ruleId != null)
+                            bean.id = me.ruleId;
+                        bean.block = rule.block[0];
+                        bean.name = ruleName;
+
                         Ext.Ajax.request({
-                            url: HABminBaseURL + "/config/rules/designer/" + (e.ruleId = 0 ? "" : me.ruleId),
+                            url: HABminBaseURL + "/config/designer/" + (me.ruleId == null ? "" : me.ruleId),
                             headers: {'Accept': 'application/json'},
-                            method: me.ruleId = 0 ? 'POST' : 'PUT',
-                            jsonData: rule,
+                            method: me.ruleId == null ? 'POST' : 'PUT',
+                            jsonData: bean,
                             success: function (response, opts) {
                                 var json = Ext.decode(response.responseText);
                                 if (json == null) {
@@ -204,16 +210,24 @@ Ext.define('openHAB.automation.ruleProperties', {
                                     return;
                                 }
 
+                                if (me.ruleId == null) {
+                                    me.ruleId = json.id;
+                                }
+                                else if (me.ruleId != json.id) {
+                                    handleStatusNotification(NOTIFICATION_ERROR,
+                                        sprintf(language.rule_DesignerIdError, ruleName));
+                                }
+
                                 // Update the toolbar
                                 toolbar.getComponent('save').disable();
                                 toolbar.getComponent('cancel').disable();
 
                                 handleStatusNotification(NOTIFICATION_OK,
-                                    sprintf(language.rule_DesignerSaveOk, modelName));
+                                    sprintf(language.rule_DesignerSaveOk, ruleName));
                             },
                             failure: function (result, request) {
                                 handleStatusNotification(NOTIFICATION_ERROR,
-                                    sprintf(language.rule_DesignerErrorSavingRule, modelName));
+                                    sprintf(language.rule_DesignerErrorSavingRule, ruleName));
                             }
                         });
                     }
