@@ -269,10 +269,17 @@ Ext.define('Ext.ux.blockly.Blockly', {
         if(Blockly.getMainWorkspace() != null)
             Blockly.getMainWorkspace().clear();
 
-        var xml = Blockly.Xml.textToDom(blocks);
-        Blockly.Xml.domToWorkspace(Blockly.getMainWorkspace(), xml);
+        if(typeof blocks == 'string') {
+            var xml = Blockly.Xml.textToDom(blocks);
+            Blockly.Xml.domToWorkspace(Blockly.getMainWorkspace(), xml);
+        }
+        else
+            Blockly.Json.setWorkspace(Blockly.getMainWorkspace(), blocks);
     },
-    getBlocks: function (readable) {
+    getBlocks: function (format, readable) {
+        if(format == null || format.toLowerCase() == 'json')
+            return Blockly.Json.getWorkspace(Blockly.getMainWorkspace());
+
         var xml = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace());
         if (readable == true)
             return Blockly.Xml.domToPrettyText(xml);
