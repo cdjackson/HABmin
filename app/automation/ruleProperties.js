@@ -45,7 +45,7 @@ Ext.define('openHAB.automation.ruleProperties', {
     ruleId: 0,
 
     initComponent: function () {
-        var me=this;
+        var me = this;
 
         var ruleTriggerTypeArray = [
             {id: 0, label: 'Item command was received ...'},
@@ -161,15 +161,46 @@ Ext.define('openHAB.automation.ruleProperties', {
                     tooltip: language.rule_DesignerSaveTip,
                     handler: function () {
                         var rule = me.getBlocks();
+
+                        // Sanity check
+                        if (rule == null || rule.block == null || rule.block.length == 0) {
+                            handleStatusNotification(NOTIFICATION_ERROR,
+                                sprintf(language.rule_DesignerErrorReadingRule));
+                            return;
+                        }
+
+                        // Get the rule name
+                        if (rule.block[0].fields == null || rule.block[0].fields.length == 0) {
+                            handleStatusNotification(NOTIFICATION_ERROR,
+                                sprintf(language.rule_DesignerErrorReadingRuleName));
+                            return;
+                        }
+
+                        var ruleName;
+                        for (var v = 0; v < rule.block[0].fields.length; v++) {
+                            if (rule.block[0].fields[v].name == "NAME") {
+                                ruleName = rule.block[0].fields[v].value;
+                                break;
+                            }
+                        }
+
+                        // Check that we have a name!
+                        if(ruleName == null || ruleName == "") {
+                            handleStatusNotification(NOTIFICATION_ERROR,
+                                sprintf(language.rule_DesignerErrorReadingRuleName));
+                            return;
+                        }
+
                         Ext.Ajax.request({
-                            url: HABminBaseURL + "/config/rules/designer/" + me.ruleId,
+                            url: HABminBaseURL + "/config/rules/designer/" + (e.ruleId = 0 ? "" : me.ruleId),
                             headers: {'Accept': 'application/json'},
                             method: me.ruleId = 0 ? 'POST' : 'PUT',
                             jsonData: rule,
                             success: function (response, opts) {
                                 var json = Ext.decode(response.responseText);
                                 if (json == null) {
-                                    handleStatusNotification(NOTIFICATION_ERROR, sprintf(language.rule_DesignerErrorSavingRule, ruleName));
+                                    handleStatusNotification(NOTIFICATION_ERROR,
+                                        sprintf(language.rule_DesignerErrorSavingRule, ruleName));
                                     return;
                                 }
 
@@ -177,10 +208,12 @@ Ext.define('openHAB.automation.ruleProperties', {
                                 toolbar.getComponent('save').disable();
                                 toolbar.getComponent('cancel').disable();
 
-                                handleStatusNotification(NOTIFICATION_OK, sprintf(language.rule_DesignerSaveOk, modelName));
+                                handleStatusNotification(NOTIFICATION_OK,
+                                    sprintf(language.rule_DesignerSaveOk, modelName));
                             },
                             failure: function (result, request) {
-                                handleStatusNotification(NOTIFICATION_ERROR, sprintf(language.rule_DesignerErrorSavingRule, modelName));
+                                handleStatusNotification(NOTIFICATION_ERROR,
+                                    sprintf(language.rule_DesignerErrorSavingRule, modelName));
                             }
                         });
                     }

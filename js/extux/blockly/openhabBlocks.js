@@ -62,5 +62,19 @@ Blockly.Blocks['persistence_get'] = {
         this.setOutput(true, ["Number", "String"]);
         this.setTooltip('');
     }
+};
 
+Blockly.Blocks['openhab_rule'] = {
+    init: function () {
+        this.setHelpUrl("HELP");
+        this.setColour(45);
+        this.appendDummyInput()
+            .appendField(language.rule_DesignerRuleName)
+            .appendField(new Blockly.FieldTextInput(name,
+                Blockly.Procedures.rename), 'NAME')
+            .appendField('', 'PARAMS');
+        this.appendStatementInput('STACK')
+            .appendField(Blockly.Msg.PROCEDURES_DEFNORETURN_DO);
+        this.setTooltip(language.rule_DesignerRuleTooltip);
+    }
 };
