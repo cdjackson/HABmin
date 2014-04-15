@@ -13263,23 +13263,23 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
 
     var inline = jsonBlock.inline;
     if (inline != null) {
-        block.setInputsInline(inline);
+        block.setInputsInline(parseBoolean(inline));
     }
     var disabled = jsonBlock.disabled;
     if (disabled != null) {
-        block.setDisabled(disabled);
+        block.setDisabled(parseBoolean(disabled));
     }
     var deletable = jsonBlock.deletable;
     if (deletable != null) {
-        block.setDeletable(deletable);
+        block.setDeletable(parseBoolean(deletable));
     }
     var movable = jsonBlock.movable;
     if (movable != null) {
-        block.setMovable(movable);
+        block.setMovable(parseBoolean(movable));
     }
     var editable = jsonBlock.editable;
     if (editable != null) {
-        block.setEditable(editable);
+        block.setEditable(parseBoolean(editable));
     }
 
     if (jsonBlock.mutation != null) {
@@ -13293,7 +13293,7 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
         block.setCommentText(jsonBlock.comment.text);
         var visible = jsonBlock.comment.pinned;
         if (visible) {
-            block.comment.setVisible(visible);
+            block.comment.setVisible(parseBoolean(visible));
         }
         var bubbleW = parseInt(jsonBlock.comment.w, 10);
         var bubbleH = parseInt(jsonBlock.comment.h, 10);
@@ -13364,6 +13364,14 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
         block.render();
     }
     return block;
+
+    function parseBoolean(boolIn) {
+        if(boolIn == true || boolIn == false)
+            return boolIn;
+        if(boolIn == 'true')
+            return true;
+        return false;
+    }
 };
 
 /**
