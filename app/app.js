@@ -126,6 +126,7 @@ var itemConfigStore;
 var itemFormatStore;
 var translationServiceStore;
 var ruleLibraryStore;
+var designStore;
 var ruleStore;
 var cronRuleStore;
 var chartStore;
@@ -752,7 +753,7 @@ function createUI() {
     });
 
 //======= Rule Template Store
-    Ext.define('RuleTemplateModel', {
+/*    Ext.define('RuleTemplateModel', {
         extend: 'Ext.data.Model',
         fields: [
             {name: 'name'},
@@ -777,6 +778,29 @@ function createUI() {
             reader: {
                 type: 'json',
                 root: 'rule'
+            },
+            headers: {'Accept': 'application/json'},
+            pageParam: undefined,
+            startParam: undefined,
+            sortParam: undefined,
+            limitParam: undefined
+        },
+        autoLoad: true
+    });*/
+
+//======= Design Store
+    // Load the rules for this item
+    designStore = Ext.create('Ext.data.JsonStore', {
+        fields: [
+            {name: 'id'},
+            {name: 'name'}
+        ],
+        proxy: {
+            type: 'rest',
+            url: HABminBaseURL + '/config/designer',
+            reader: {
+                type: 'json',
+                root: 'designs'
             },
             headers: {'Accept': 'application/json'},
             pageParam: undefined,
@@ -821,7 +845,7 @@ function createUI() {
 
 
 //======= Rule Store
-    Ext.define('RuleModel', {
+/*    Ext.define('RuleModel', {
         extend: 'Ext.data.Model',
         fields: [
             {name: 'item'},
@@ -847,7 +871,7 @@ function createUI() {
             limitParam: undefined
         },
         autoLoad: true
-    });
+    });*/
 
 
 //======= Item Config Store
