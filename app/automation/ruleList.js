@@ -57,9 +57,6 @@ Ext.define('openHAB.automation.ruleList', {
                     disabled: true,
                     tooltip: language.rule_ListDeleteTip,
                     handler: function () {
-                        Ext.getCmp('automationPropertyContainer').removeProperty();
-                        return;
-
                         // Get the item name to delete
                         var record = ruleList.getSelectionModel().getSelection()[0];
                         if (record == null)

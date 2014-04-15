@@ -228,6 +228,10 @@ Ext.define('openHAB.automation.ruleProperties', {
                             failure: function (result, request) {
                                 handleStatusNotification(NOTIFICATION_ERROR,
                                     sprintf(language.rule_DesignerErrorSavingRule, ruleName));
+                            },
+                            callback: function (options, success, response) {
+                                // Reload the store
+                                designStore.reload();
                             }
                         });
                     }
