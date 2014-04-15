@@ -613,8 +613,6 @@ var language = {
     rule_DesignerToolboxLibrary: "Library",
     rule_DesignerErrorSavingRule: "Error saving rule '%s'.",
     rule_DesignerSaveOk: "Rule '%s' saved successfully.",
-    rule_ListConfirmDeleteTitle: "Delete Rule",
-    rule_ListConfirmDeleteMsg: "Are you sure you want to delete the rule '%s'",
     rule_DesignerErrorReadingRule: "Error reading rule!",
     rule_DesignerErrorReadingRuleName: "Error reading rule name!",
     rule_DesignerIdError: "ID Consistency error saving rule '%s'. Rule may have been duplicated.",
@@ -632,6 +630,12 @@ var language = {
     rule_ListRule: "Rule",
     rule_ListDeleteTip: "Delete the selected rule",
     rule_ListAddTip: "Add a new rule",
+    rule_ListConfirmDeleteTitle: "Delete Rule",
+    rule_ListConfirmDeleteMsg: "Are you sure you want to delete the rule '%s'",
+    rule_ListDeleteOk: "Design '%s' deleted successfully.",
+    rule_ListDeleteError: "Error deleting design '%s'!",
+    rule_ListGetError: "Error receiving design '%d'!",
+
 
     // automation/notificationList.js
     notification_ListTitle: "Notifications"

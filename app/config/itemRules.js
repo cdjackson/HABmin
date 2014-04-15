@@ -49,7 +49,7 @@ Ext.define('openHAB.config.itemRules', {
         this.title = language.config_ItemRulesTitle;
         var itemName = "";
         var ruleRecord;
-
+return;
         // Load the rules for this item
         var store = Ext.create('Ext.data.JsonStore', {
             model: 'RuleTemplateModel',
@@ -238,7 +238,7 @@ Ext.define('openHAB.config.itemRules', {
 
                     // Update the list of rules
                     var json = Ext.decode(response.responseText);
-                    ruleLibraryStore.loadData(json.rule);
+//                    ruleLibraryStore.loadData(json.rule);
 
                     // Update the toolbar
                     toolbar.getComponent('add').disable();

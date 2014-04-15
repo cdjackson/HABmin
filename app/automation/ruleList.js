@@ -73,7 +73,8 @@ Ext.define('openHAB.automation.ruleList', {
                             buttons: Ext.Msg.YESNO,
                             config: {
                                 obj: this,
-                                name: ruleName
+                                name: ruleName,
+                                id: record.get('id')
                             },
                             fn: deleteRule,
                             icon: Ext.MessageBox.QUESTION
@@ -115,7 +116,7 @@ Ext.define('openHAB.automation.ruleList', {
         });
 
         var ruleList = Ext.create('Ext.grid.Panel', {
-            store: ruleStore,
+            store: designStore,
             header: false,
             split: true,
             tbar: toolbar,
@@ -124,11 +125,45 @@ Ext.define('openHAB.automation.ruleList', {
             columns: [
                 {
                     flex: 1,
-                    dataIndex: 'rule'
+                    dataIndex: 'name'
                 }
             ],
             listeners: {
                 itemclick: function (grid, record) {
+                    if (record == null)
+                        return;
+
+                    Ext.Ajax.request({
+                        url: HABminBaseURL + "/config/designer/" + record.get("id"),
+                        headers: {'Accept': 'application/json'},
+                        method: 'GET',
+                        success: function (response, opts) {
+                            var json = Ext.decode(response.responseText);
+                            if(json == null)
+                                return;
+                            var ruleDesigner = Ext.create('openHAB.automation.ruleProperties', {
+                                ruleId: json.id,
+                                blockly: {
+                                    blocks: json
+                                }
+                            });
+
+                            if (ruleDesigner == null)
+                                return;
+
+                            Ext.getCmp('automationPropertyContainer').setNewProperty(ruleDesigner);
+                        },
+                        failure: function (result, request) {
+                            handleStatusNotification(NOTIFICATION_ERROR,
+                                sprintf(language.rule_ListGetError, options.config.name));
+                        },
+                        callback: function (options, success, response) {
+                            // Enable toolbar
+                            toolbar.getComponent('delete').enable();
+                        }
+                    });
+
+
                 }
             }
         });
@@ -144,26 +179,26 @@ Ext.define('openHAB.automation.ruleList', {
 
             // Tell OH to Remove the item
             Ext.Ajax.request({
-                url: HABminBaseURL + "/config/items/" + options.config.name,
+                url: HABminBaseURL + "/config/designer/" + options.config.id,
                 headers: {'Accept': 'application/json'},
                 method: 'DELETE',
                 success: function (response, opts) {
                     handleStatusNotification(NOTIFICATION_OK,
-                        sprintf(language.config_ItemListDeleted, options.config.name));
+                        sprintf(language.rule_ListDeleteOk, options.config.name));
                 },
                 failure: function (result, request) {
                     handleStatusNotification(NOTIFICATION_ERROR,
-                        sprintf(language.config_ItemListDeleteError, options.config.name));
+                        sprintf(language.rule_ListDeleteError, options.config.name));
                 },
                 callback: function (options, success, response) {
                     // Reload the store
-//                    itemConfigStore.reload();
+                    designStore.reload();
 
                     // Disable delete
                     toolbar.getComponent('delete').disable();
 
-                    // Clear the item properties
-//                    Ext.getCmp('configPropertyContainer').removeProperty();
+                    // Clear the design
+                    Ext.getCmp('automationPropertyContainer').removeProperty();
                 }
             });
         }
