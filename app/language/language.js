@@ -631,7 +631,7 @@ var language = {
     rule_ListDeleteTip: "Delete the selected rule",
     rule_ListAddTip: "Add a new rule",
     rule_ListConfirmDeleteTitle: "Delete Rule",
-    rule_ListConfirmDeleteMsg: "Are you sure you want to delete the rule '%s'",
+    rule_ListConfirmDeleteMsg: "Are you sure you want to delete the rule '%s'?",
     rule_ListDeleteOk: "Design '%s' deleted successfully.",
     rule_ListDeleteError: "Error deleting design '%s'!",
     rule_ListGetError: "Error receiving design '%d'!",
