@@ -1,4 +1,4 @@
-/*! ExtBlockly 2014-04-15 */
+/*! ExtBlockly 2014-04-17 */
 /**
  * @license
  * Visual Blocks Editor
@@ -171,12 +171,15 @@ Blockly.Blocks['lists_create_with'] = {
     },
     /**
      * Create XML to represent list inputs.
-     * @return {Element} XML storage element.
+     * @return {Array} XML storage element.
      * @this Blockly.Block
      */
     mutationToDom: function () {
-        var container = document.createElement('mutation');
-        container.setAttribute('items', this.itemCount_);
+        var container = [];
+        var parameter = {};
+        parameter.name = 'items';
+        parameter.value = this.itemCount_;
+        container.push(parameter);
         return container;
     },
     /**
@@ -185,10 +188,13 @@ Blockly.Blocks['lists_create_with'] = {
      * @this Blockly.Block
      */
     domToMutation: function (xmlElement) {
+        var elements = [].concat(xmlElement);
         for (var x = 0; x < this.itemCount_; x++) {
             this.removeInput('ADD' + x);
         }
-        this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+        if (elements[0].name.toLowerCase() == 'items') {
+            this.itemCount_ = parseInt(elements[0].value, 10);
+        }
         for (var x = 0; x < this.itemCount_; x++) {
             var input = this.appendValueInput('ADD' + x);
             if (x == 0) {
@@ -428,15 +434,20 @@ Blockly.Blocks['lists_getIndex'] = {
     /**
      * Create XML to represent whether the block is a statement or a value.
      * Also represent whether there is an 'AT' input.
-     * @return {Element} XML storage element.
+     * @return {Array} XML storage element.
      * @this Blockly.Block
      */
     mutationToDom: function () {
-        var container = document.createElement('mutation');
-        var isStatement = !this.outputConnection;
-        container.setAttribute('statement', isStatement);
-        var isAt = this.getInput('AT').type == Blockly.INPUT_VALUE;
-        container.setAttribute('at', isAt);
+        var container = [];
+        var parameter = {};
+        parameter.name = 'statement';
+        parameter.value = !this.outputConnection;
+        container.push(parameter);
+
+        parameter.name = 'at';
+        parameter.value = this.getInput('AT').type == Blockly.INPUT_VALUE;
+        container.push(parameter);
+
         return container;
     },
     /**
@@ -445,12 +456,15 @@ Blockly.Blocks['lists_getIndex'] = {
      * @this Blockly.Block
      */
     domToMutation: function (xmlElement) {
-        // Note: Until January 2013 this block did not have mutations,
-        // so 'statement' defaults to false and 'at' defaults to true.
-        var isStatement = (xmlElement.getAttribute('statement') == 'true');
-        this.updateStatement_(isStatement);
-        var isAt = (xmlElement.getAttribute('at') != 'false');
-        this.updateAt_(isAt);
+        var elements = [].concat(xmlElement);
+        for (var x = 0; x < elements.length; x++) {
+            if (elements[x].name.toLowerCase() == 'statement') {
+                this.updateStatement_(Blockly.Json.parseBoolean(elements[x].value));
+            }
+            if (elements[x].name.toLowerCase() == 'at') {
+                this.updateAt_(Blockly.Json.parseBoolean(elements[x].value));
+            }
+        }
     },
     /**
      * Switch between a value block and a statement block.
@@ -558,13 +572,16 @@ Blockly.Blocks['lists_setIndex'] = {
     },
     /**
      * Create XML to represent whether there is an 'AT' input.
-     * @return {Element} XML storage element.
+     * @return {Array} XML storage element.
      * @this Blockly.Block
      */
     mutationToDom: function () {
-        var container = document.createElement('mutation');
-        var isAt = this.getInput('AT').type == Blockly.INPUT_VALUE;
-        container.setAttribute('at', isAt);
+        var container = [];
+        var parameter = {};
+        parameter.name = 'at';
+        parameter.value = this.getInput('AT').type == Blockly.INPUT_VALUE;
+        container.push(parameter);
+
         return container;
     },
     /**
@@ -573,10 +590,12 @@ Blockly.Blocks['lists_setIndex'] = {
      * @this Blockly.Block
      */
     domToMutation: function (xmlElement) {
-        // Note: Until January 2013 this block did not have mutations,
-        // so 'at' defaults to true.
-        var isAt = (xmlElement.getAttribute('at') != 'false');
-        this.updateAt_(isAt);
+        var elements = [].concat(xmlElement);
+        for (var x = 0; x < elements.length; x++) {
+            if (elements[x].name.toLowerCase() == 'at') {
+                this.updateAt_(Blockly.Json.parseBoolean(elements[x].value));
+            }
+        }
     },
     /**
      * Create or delete an input for the numeric index.
@@ -656,15 +675,20 @@ Blockly.Blocks['lists_getSublist'] = {
     },
     /**
      * Create XML to represent whether there are 'AT' inputs.
-     * @return {Element} XML storage element.
+     * @return {Array} XML storage element.
      * @this Blockly.Block
      */
     mutationToDom: function () {
-        var container = document.createElement('mutation');
-        var isAt1 = this.getInput('AT1').type == Blockly.INPUT_VALUE;
-        container.setAttribute('at1', isAt1);
-        var isAt2 = this.getInput('AT2').type == Blockly.INPUT_VALUE;
-        container.setAttribute('at2', isAt2);
+        var container = [];
+        var parameter = {};
+        parameter.name = 'at1';
+        parameter.value = this.getInput('AT1').type == Blockly.INPUT_VALUE;
+        container.push(parameter);
+
+        parameter.name = 'at2';
+        parameter.value = this.getInput('AT2').type == Blockly.INPUT_VALUE;
+        container.push(parameter);
+
         return container;
     },
     /**
@@ -673,10 +697,15 @@ Blockly.Blocks['lists_getSublist'] = {
      * @this Blockly.Block
      */
     domToMutation: function (xmlElement) {
-        var isAt1 = (xmlElement.getAttribute('at1') == 'true');
-        var isAt2 = (xmlElement.getAttribute('at2') == 'true');
-        this.updateAt_(1, isAt1);
-        this.updateAt_(2, isAt2);
+        var elements = [].concat(xmlElement);
+        for (var x = 0; x < elements.length; x++) {
+            if (elements[x].name.toLowerCase() == 'at1') {
+                this.updateAt_(1, Blockly.Json.parseBoolean(elements[x].value));
+            }
+            if (elements[x].name.toLowerCase() == 'at2') {
+                this.updateAt_(2, Blockly.Json.parseBoolean(elements[x].value));
+            }
+        }
     },
     /**
      * Create or delete an input for a numeric index.
@@ -1645,13 +1674,16 @@ Blockly.Blocks['math_number_property'] = {
     },
     /**
      * Create XML to represent whether the 'divisorInput' should be present.
-     * @return {Element} XML storage element.
+     * @return {Array} XML storage element.
      * @this Blockly.Block
      */
     mutationToDom: function () {
-        var container = document.createElement('mutation');
-        var divisorInput = (this.getFieldValue('PROPERTY') == 'DIVISIBLE_BY');
-        container.setAttribute('divisor_input', divisorInput);
+        var container = [];
+        var parameter = {};
+        parameter.name = 'divisor_input';
+        parameter.value = this.getFieldValue('PROPERTY') == 'DIVISIBLE_BY';
+        container.push(parameter);
+
         return container;
     },
     /**
@@ -1660,8 +1692,12 @@ Blockly.Blocks['math_number_property'] = {
      * @this Blockly.Block
      */
     domToMutation: function (xmlElement) {
-        var divisorInput = (xmlElement.getAttribute('divisor_input') == 'true');
-        this.updateShape_(divisorInput);
+        var elements = [].concat(xmlElement);
+        for (var x = 0; x < elements.length; x++) {
+            if (elements[x].name.toLowerCase() == 'divisor_input') {
+                this.updateShape_(Blockly.Json.parseBoolean(elements[x].value));
+            }
+        }
     },
     /**
      * Modify this block to have (or not have) an input for 'is divisible by'.
@@ -1952,7 +1988,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     },
     /**
      * Create XML to represent the argument inputs.
-     * @return {Element} XML storage element.
+     * @return {Array} XML storage element.
      * @this Blockly.Block
      */
     mutationToDom: function () {
@@ -2337,17 +2373,18 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     },
     /**
      * Create XML to represent the (non-editable) name and arguments.
-     * @return {Element} XML storage element.
+     * @return {Array} XML storage element.
      * @this Blockly.Block
      */
     mutationToDom: function () {
-        var container = document.createElement('mutation');
-        container.setAttribute('name', this.getProcedureCall());
+        var container = [];
         for (var x = 0; x < this.arguments_.length; x++) {
-            var parameter = document.createElement('arg');
-            parameter.setAttribute('name', this.arguments_[x]);
-            container.appendChild(parameter);
+            var parameter = {};
+            parameter.name = 'arg';
+            parameter.value = this.arguments_[x];
+            container.push(parameter);
         }
+
         return container;
     },
     /**
@@ -2356,7 +2393,6 @@ Blockly.Blocks['procedures_callnoreturn'] = {
      * @this Blockly.Block
      */
     domToMutation: function (xmlElement) {
-
         this.arguments_ = [];
         var elements = [].concat(xmlElement);
         for (var x = 0; x < elements.length; x++) {
@@ -2364,8 +2400,6 @@ Blockly.Blocks['procedures_callnoreturn'] = {
                 this.arguments_.push(elements[x].value);
             }
         }
-
-
 
         var name = xmlElement.getAttribute('name');
         this.setFieldValue(name, 'NAME');
@@ -2468,12 +2502,16 @@ Blockly.Blocks['procedures_ifreturn'] = {
     },
     /**
      * Create XML to represent whether this block has a return value.
-     * @return {Element} XML storage element.
+     * @return {Array} XML storage element.
      * @this Blockly.Block
      */
     mutationToDom: function () {
-        var container = document.createElement('mutation');
-        container.setAttribute('value', Number(this.hasReturnValue_));
+        var container = [];
+        var parameter = {};
+        parameter.name = 'arg';
+        parameter.value = Number(this.hasReturnValue_);
+        container.push(parameter);
+
         return container;
     },
     /**
@@ -2482,12 +2520,17 @@ Blockly.Blocks['procedures_ifreturn'] = {
      * @this Blockly.Block
      */
     domToMutation: function (xmlElement) {
-        var value = xmlElement.getAttribute('value');
-        this.hasReturnValue_ = (value == 1);
-        if (!this.hasReturnValue_) {
-            this.removeInput('VALUE');
-            this.appendDummyInput('VALUE')
-                .appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);
+        this.arguments_ = [];
+        var elements = [].concat(xmlElement);
+        for (var x = 0; x < elements.length; x++) {
+            if (elements[x].name.toLowerCase() == 'value') {
+                this.hasReturnValue_ = (elements[x].value == 1);
+                if (!this.hasReturnValue_) {
+                    this.removeInput('VALUE');
+                    this.appendDummyInput('VALUE')
+                        .appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);
+                }
+            }
         }
     },
     /**
@@ -2627,7 +2670,14 @@ Blockly.Blocks['text_join'] = {
         for (var x = 0; x < this.itemCount_; x++) {
             this.removeInput('ADD' + x);
         }
-        this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+
+        var elements = [].concat(xmlElement);
+        for (var x = 0; x < elements.length; x++) {
+            if (elements[x].name.toLowerCase() == 'items') {
+                this.itemCount_ = parseInt(elements[x].value, 10);
+            }
+        }
+
         for (var x = 0; x < this.itemCount_; x++) {
             var input = this.appendValueInput('ADD' + x);
             if (x == 0) {
@@ -2894,10 +2944,12 @@ Blockly.Blocks['text_charAt'] = {
      * @this Blockly.Block
      */
     domToMutation: function (xmlElement) {
-        // Note: Until January 2013 this block did not have mutations,
-        // so 'at' defaults to true.
-        var isAt = (xmlElement.getAttribute('at') != 'false');
-        this.updateAt_(isAt);
+        var elements = [].concat(xmlElement);
+        for (var x = 0; x < elements.length; x++) {
+            if (elements[x].name.toLowerCase() == 'at') {
+                this.updateAt_(Blockly.Json.parseBoolean(elements[x].value));
+            }
+        }
     },
     /**
      * Create or delete an input for the numeric index.

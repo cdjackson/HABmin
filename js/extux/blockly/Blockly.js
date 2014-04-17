@@ -225,12 +225,12 @@ Ext.define('Ext.ux.blockly.Blockly', {
                 // Loop through all records in the toolbox and create the SVG graphic
                 for (var i = 0; i < toolboxGrids.length; i++) {
                     toolboxGrids[i].store.each(function (record, id) {
-                        var blockXml = Blockly.Xml.textToDom(record.get("block"));
-                        if (blockXml == null || blockXml.hasChildNodes() == false) {
+                        var block = Blockly.Json.domToBlock(Blockly.getMainWorkspace(), record.get("block"));
+                        if (block == null) {
                             console.log("Unable to load block '" + record.get("block") + "'.");
                         }
                         else {
-                            var block = Blockly.Xml.domToBlock(Blockly.getMainWorkspace(), blockXml.childNodes[0]);
+//                            var block = Blockly.Json.domToBlock(Blockly.getMainWorkspace(), blockXml.childNodes[0]);
 
                             var svg = '<svg height="' + block.getHeightWidth().height + '" width="' + (block.getHeightWidth().width + 10) + '"><g transform=\"translate(10)\">' + block.getSvgRoot().outerHTML + "</g></svg>";
                             record.set('svg', svg);
@@ -269,12 +269,7 @@ Ext.define('Ext.ux.blockly.Blockly', {
         if(Blockly.getMainWorkspace() != null)
             Blockly.getMainWorkspace().clear();
 
-        if(typeof blocks == 'string') {
-            var xml = Blockly.Xml.textToDom(blocks);
-            Blockly.Xml.domToWorkspace(Blockly.getMainWorkspace(), xml);
-        }
-        else
-            Blockly.Json.setWorkspace(Blockly.getMainWorkspace(), blocks);
+        Blockly.Json.setWorkspace(Blockly.getMainWorkspace(), blocks);
     },
     getBlocks: function (format, readable) {
         if(format == null || format.toLowerCase() == 'json')

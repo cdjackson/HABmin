@@ -1,4 +1,4 @@
-/*! ExtBlockly 2014-04-15 */
+/*! ExtBlockly 2014-04-17 */
 /**
  * @license
  * Visual Blocks Editor
@@ -13263,23 +13263,23 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
 
     var inline = jsonBlock.inline;
     if (inline != null) {
-        block.setInputsInline(parseBoolean(inline));
+        block.setInputsInline(this.parseBoolean(inline));
     }
     var disabled = jsonBlock.disabled;
     if (disabled != null) {
-        block.setDisabled(parseBoolean(disabled));
+        block.setDisabled(this.parseBoolean(disabled));
     }
     var deletable = jsonBlock.deletable;
     if (deletable != null) {
-        block.setDeletable(parseBoolean(deletable));
+        block.setDeletable(this.parseBoolean(deletable));
     }
     var movable = jsonBlock.movable;
     if (movable != null) {
-        block.setMovable(parseBoolean(movable));
+        block.setMovable(this.parseBoolean(movable));
     }
     var editable = jsonBlock.editable;
     if (editable != null) {
-        block.setEditable(parseBoolean(editable));
+        block.setEditable(this.parseBoolean(editable));
     }
 
     if (jsonBlock.mutation != null) {
@@ -13293,7 +13293,7 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
         block.setCommentText(jsonBlock.comment.text);
         var visible = jsonBlock.comment.pinned;
         if (visible) {
-            block.comment.setVisible(parseBoolean(visible));
+            block.comment.setVisible(this.parseBoolean(visible));
         }
         var bubbleW = parseInt(jsonBlock.comment.w, 10);
         var bubbleH = parseInt(jsonBlock.comment.h, 10);
@@ -13353,7 +13353,7 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
 
     var collapsed = jsonBlock.collapsed;
     if (collapsed != null) {
-        block.setCollapsed(collapsed);
+        block.setCollapsed(this.parseBoolean(collapsed));
     }
     var next = block.nextConnection && block.nextConnection.targetBlock();
     if (next) {
@@ -13364,15 +13364,15 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
         block.render();
     }
     return block;
-
-    function parseBoolean(boolIn) {
-        if(boolIn == true || boolIn == false)
-            return boolIn;
-        if(boolIn == 'true')
-            return true;
-        return false;
-    }
 };
+
+Blockly.Json.parseBoolean = function (boolIn) {
+    if(boolIn == true || boolIn == false)
+        return boolIn;
+    if(boolIn == 'true')
+        return true;
+    return false;
+}
 
 /**
  * Remove any 'next' block (statements in a stack).
