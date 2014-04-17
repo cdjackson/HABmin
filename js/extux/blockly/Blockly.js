@@ -216,8 +216,7 @@ Ext.define('Ext.ux.blockly.Blockly', {
                         if (data.block == null)
                             return false;
 
-                        var block = Blockly.Xml.textToDom(data.block);
-                        Blockly.Xml.domToBlock(Blockly.getMainWorkspace(), block.childNodes[0]);
+                        Blockly.Json.domToBlock(Blockly.getMainWorkspace(), data.block);
                         return true;
                     }
                 });
@@ -271,14 +270,7 @@ Ext.define('Ext.ux.blockly.Blockly', {
 
         Blockly.Json.setWorkspace(Blockly.getMainWorkspace(), blocks);
     },
-    getBlocks: function (format, readable) {
-        if(format == null || format.toLowerCase() == 'json')
-            return Blockly.Json.getWorkspace(Blockly.getMainWorkspace());
-
-        var xml = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace());
-        if (readable == true)
-            return Blockly.Xml.domToPrettyText(xml);
-        else
-            return Blockly.Xml.domToText(xml);
+    getBlocks: function () {
+        return Blockly.Json.getWorkspace(Blockly.getMainWorkspace());
     }
 });
