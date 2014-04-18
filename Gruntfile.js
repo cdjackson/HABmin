@@ -131,11 +131,14 @@ module.exports = function (grunt) {
             },
             blocklymedia: {
                 expand: true,
-                flatten: true,
-                src: ['js/extux/blockly/media'],
+                src: ['js/extux/blockly/media/**'],
                 dest: 'build/webapps/habmin/js/extux/blockly/media'
             },
-
+            blocklymsg: {
+                expand: true,
+                src: ['js/extux/blockly/msg/**'],
+                dest: 'build/webapps/habmin/js/extux/blockly/msg'
+            }
         },
         cssmin: {
             habmin: {
@@ -169,6 +172,9 @@ module.exports = function (grunt) {
         'json-minify': {
             language: {
                 files: 'build/webapps/habmin/app/language/*.json'
+            },
+            blocklymsg: {
+                files: 'build/webapps/habmin/js/extjs/blockly/msg/*.json'
             }
         },
         compress: {
