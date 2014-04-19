@@ -1,4 +1,4 @@
-/*! ExtBlockly 2014-04-17 */
+/*! ExtBlockly 2014-04-18 */
 /**
  * @license
  * Visual Blocks Editor
@@ -7317,13 +7317,8 @@ Blockly.FieldDropdown.prototype.showEditor_ = function () {
             var value = item.getId();
             if (thisField.changeHandler_) {
                 // Call any change handler, and allow it to override.
-                var override = thisField.changeHandler_(value);
-                if (override !== undefined) {
-                    value = override;
-                }
-            }
-            if (value !== null) {
-                thisField.setValue(value);
+//                var override = thisField.changeHandler_(value);
+                thisField.changeHandler_(value);
             }
         }
     };
@@ -7880,37 +7875,88 @@ Blockly.FieldVariable.dropdownCreate = function () {
  *     handled (rename), or undefined if an existing variable was chosen.
  * @this {!Blockly.FieldVariable}
  */
-Blockly.FieldVariable.dropdownChange = function (text) {
-    function promptName(promptText, defaultText) {
-        Blockly.hideChaff();
-        // TODO = change to use Ext.Msg.prompt
-        // TODO = Due to the callback nature of this though, this isn't so simple?
-        var newVar = window.prompt(promptText, defaultText);
-        // Merge runs of whitespace.  Strip leading and trailing whitespace.
-        // Beyond this, all names are legal.
-        return newVar && newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
+Blockly.FieldVariable.dropdownChange = function (inputText) {
+    Blockly.hideChaff();
+
+    var oldVar = "";
+    if (inputText == Blockly.Msg.RENAME_VARIABLE) {
+        oldVar = this.getText();
+    }
+    else if (inputText != Blockly.Msg.NEW_VARIABLE) {
+        return undefined;
     }
 
-    if (text == Blockly.Msg.RENAME_VARIABLE) {
-        var oldVar = this.getText();
-        text = promptName(Blockly.Msg.RENAME_VARIABLE_TITLE.replace('%1', oldVar),
-            oldVar);
-        if (text) {
-            Blockly.Variables.renameVariable(oldVar, text);
-        }
-        return null;
-    } else if (text == Blockly.Msg.NEW_VARIABLE) {
-        text = promptName(Blockly.Msg.NEW_VARIABLE_TITLE, '');
-        // Since variables are case-insensitive, ensure that if the new variable
-        // matches with an existing variable, the new case prevails throughout.
-        if (text) {
-            Blockly.Variables.renameVariable(text, text);
-            return text;
-        }
-        return null;
-    }
-    return undefined;
-};
+    var thisField = this;
+
+    var form = Ext.widget('form', {
+        layout: {
+            type: 'vbox',
+            align: 'stretch'
+        },
+        border: false,
+        bodyPadding: 10,
+        fieldDefaults: {
+            labelAlign: 'top',
+            labelWidth: 100,
+            labelStyle: 'font-weight:bold'
+        },
+        defaults: {
+            margins: '0 0 10 0'
+        },
+        items: [
+            {
+                margin: '0 0 0 0',
+                xtype: 'textfield',
+                fieldLabel: inputText,
+                itemId: 'variable',
+                name: 'variable',
+                value: oldVar
+            }
+        ],
+        buttons: [
+            {
+                text: "cancel",
+                handler: function () {
+                    this.up('window').destroy();
+                }
+            },
+            {
+                text: "Ok",
+                handler: function () {
+                    if (this.up('form').getForm().isValid()) {
+                        // Read the variable name
+                        var newVar = form.getForm().findField('variable').getSubmitValue();
+
+                        // Merge runs of whitespace.  Strip leading and trailing whitespace.
+                        // Beyond this, all names are legal.
+                        newVar && newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
+
+                        Blockly.Variables.renameVariable(oldVar, newVar);
+                        thisField.setText(newVar);
+
+                        this.up('window').destroy();
+                    }
+                }
+            }
+        ]
+    });
+
+    var saveWin = Ext.widget('window', {
+        title: inputText,
+        closeAction: 'destroy',
+        width: 225,
+        resizable: false,
+        draggable: false,
+        modal: true,
+        layout: {
+            type: 'vbox',
+            align: 'stretch'
+        },
+        items: [form]
+    });
+
+    saveWin.show();
+}
 
 /**
  * @license
@@ -12991,11 +13037,11 @@ Blockly.Json.deleteNext = function (jsonBlock) {
     }
     return;
 
-
+/*
     for (var x = 0, child; child = xmlBlock.childNodes[x]; x++) {
         if (child.nodeName.toLowerCase() == 'next') {
             xmlBlock.removeChild(child);
             break;
         }
-    }
+    }*/
 };
