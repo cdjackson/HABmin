@@ -1,4 +1,4 @@
-/*! ExtBlockly 2014-04-18 */
+/*! ExtBlockly 2014-04-19 */
 /**
  * @license
  * Visual Blocks Editor
@@ -231,6 +231,7 @@ Blockly.svgResize = function () {
  * @private
  */
 Blockly.onMouseDown_ = function (e) {
+    console.log("Blockly mouse down");
     Blockly.svgResize();
     Blockly.terminateDrag_(); // In case mouse-up event was lost.
     Blockly.hideChaff();
@@ -274,6 +275,8 @@ Blockly.onMouseUp_ = function (e) {
  * @private
  */
 Blockly.onMouseMove_ = function (e) {
+    console.log("Blockly mouse move");
+
     if (Blockly.mainWorkspace.dragMode) {
         Blockly.removeAllRanges();
         var dx = e.clientX - Blockly.mainWorkspace.startDragMouseX;
@@ -1186,7 +1189,7 @@ Blockly.Block.prototype.getHeightWidth = function () {
  * @private
  */
 Blockly.Block.prototype.onMouseDown_ = function (e) {
-    console.log("Block.prototype.onMouseDown_");
+    console.log("block.onMouseDown " + this.id + " (" + e.clientX + ","+ e.clientY + ")" );
 
     if (this.isInFlyout) {
         return;
@@ -1248,7 +1251,7 @@ Blockly.Block.prototype.onMouseDown_ = function (e) {
  * @private
  */
 Blockly.Block.prototype.onMouseUp_ = function (e) {
-    console.log("mouse up  block.js")
+    console.log("block.onMouseUp " + this.id + " (" + e.clientX + ","+ e.clientY + ")" );
 
     var this_ = this;
     Blockly.doCommand(function () {
@@ -1533,10 +1536,14 @@ Blockly.Block.prototype.setDragging_ = function (adding) {
  * @private
  */
 Blockly.Block.prototype.onMouseMove_ = function (e) {
+    console.log("block.onMouseMove " + this.id + " (" + e.clientX + ","+ e.clientY + ")" );
+
     var this_ = this;
     Blockly.doCommand(function () {
+        console.log("block.onMouseMove " + this_.id + " ** 1 **");
         if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY == 0 &&
             e.button == 0) {
+            console.log("block.onMouseMove " + this_.id + " ** 2 **");
             /* HACK:
              Safari Mobile 6.0 and Chrome for Android 18.0 fire rogue mousemove events
              on certain touch actions. Ignore events with these signatures.
@@ -1560,6 +1567,7 @@ Blockly.Block.prototype.onMouseMove_ = function (e) {
             }
         }
         if (Blockly.Block.dragMode_ == 2) {
+            console.log("block.onMouseMove " + this_.id + " ** 3 **");
             // Unrestricted dragging.
             var x = this_.startDragX + dx;
             var y = this_.startDragY + dy;
@@ -1606,9 +1614,12 @@ Blockly.Block.prototype.onMouseMove_ = function (e) {
             if (this_.workspace.trashcan && this_.isDeletable()) {
                 this_.workspace.trashcan.onMouseMove(e);
             }
+            console.log("block.onMouseMove " + this_.id + " ** 9 **");
         }
+        console.log("block.onMouseMove " + this_.id + " ** 10 **");
         // This event has been handled.  No need to bubble up to the document.
         e.stopPropagation();
+        console.log("block.onMouseMove " + this_.id + " ** 11 **");
     });
 };
 
@@ -12662,6 +12673,7 @@ Blockly.Workspace.prototype.fireChangeEvent = function () {
  * Paste the provided block onto the workspace.
  * @param {!Element} xmlBlock XML block element.
  */
+// TODO Convert to JSON
 Blockly.Workspace.prototype.paste = function (xmlBlock) {
     if (xmlBlock.getElementsByTagName('block').length >=
         this.remainingCapacity()) {
