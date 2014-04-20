@@ -1,4 +1,4 @@
-/*! ExtBlockly 2014-04-19 */
+/*! ExtBlockly 2014-04-20 */
 /**
  * @license
  * Visual Blocks Editor
@@ -275,9 +275,10 @@ Blockly.onMouseUp_ = function (e) {
  * @private
  */
 Blockly.onMouseMove_ = function (e) {
-    console.log("Blockly mouse move");
+    console.log("Blockly mouse move (" + Blockly.mainWorkspace.dragMode + ")");
 
     if (Blockly.mainWorkspace.dragMode) {
+        console.log("Dragging!!!");
         Blockly.removeAllRanges();
         var dx = e.clientX - Blockly.mainWorkspace.startDragMouseX;
         var dy = e.clientY - Blockly.mainWorkspace.startDragMouseY;

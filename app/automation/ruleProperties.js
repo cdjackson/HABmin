@@ -136,9 +136,17 @@ Ext.define('openHAB.automation.ruleProperties', {
             {category: "Math", block: {type:'math_random_int'}},
             {category: "Items", block: {type:'variables_set'}},
             {category: "Items", block: {type:'variables_get'}},
-            {category: "Items", block: {type:'persistence_get'}},
+            {category: "Items", block: {type:'persistence_get', children: [
+                {name: 'DAYS', value: 'value', block: {type: 'math_number', fields:[{name: 'NUM', value:'0'}]}},
+                {name: 'HOURS', value: 'value', block: {type: 'math_number', fields:[{name: 'NUM', value:'0'}]}},
+                {name: 'MINUTES', value: 'value', block: {type: 'math_number', fields:[{name: 'NUM', value:'0'}]}},
+                {name: 'SECONDS', value: 'value', block: {type: 'math_number', fields:[{name: 'NUM', value:'0'}]}}
+            ]}},
             {category: "Functions", block: {type:'procedures_ifreturn'}}
         ];
+
+
+
 
         var toolbar = Ext.create('Ext.toolbar.Toolbar', {
             items: [
