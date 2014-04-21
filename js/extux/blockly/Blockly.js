@@ -21,6 +21,7 @@ Ext.define('Ext.ux.blockly.Blockly', {
 
         var toolboxGrids = [];
         var dragBlock = null;
+        var coreId = null;
         var blocklyId = null;
         var xy = null;
         var scrollbar = null;
@@ -95,7 +96,7 @@ Ext.define('Ext.ux.blockly.Blockly', {
                                     'background-color': '#f00',
                                     'padding-left': '0px'
                                 },
-                                //onStartDrag: function () {
+                                constrain: false,
                                 onMouseDown: function (x, y) {
                                     console.log("startDrag");
 
@@ -106,7 +107,8 @@ Ext.define('Ext.ux.blockly.Blockly', {
                                     me.scrollbar = Blockly.mainWorkspace.scrollbar;
                                     Blockly.mainWorkspace.scrollbar = false;
 
-                                    // this.constrainTo();//"body", {}, false);
+                                    this.setXConstraint(-200,5000,0);
+//                                    this.constrainTo(me.getId(), {left: 0, top: 0, right: -33330, bottom: -3330}, false);
                                 },
                                 getDragData: function (e) {
                                     var sourceEl = e.getTarget("svg", 10);
@@ -123,9 +125,6 @@ Ext.define('Ext.ux.blockly.Blockly', {
                                         };
                                     }
                                 },
-
-                                // Provide coordinates for the proxy to slide back to on failed drag.
-                                // This is the original XY coordinates of the draggable element.
                                 getRepairXY: function () {
                                     // Restore the scrollbars
                                     Blockly.mainWorkspace.scrollbar = me.scrollbar;
@@ -135,6 +134,9 @@ Ext.define('Ext.ux.blockly.Blockly', {
                                         dragBlock.dispose();
                                         dragBlock = null;
                                     }
+
+                                    // Provide coordinates for the proxy to slide back to on failed drag.
+                                    // This is the original XY coordinates of the draggable element.
                                     return this.dragData.repairXY;
                                 }
                             });
@@ -206,7 +208,6 @@ Ext.define('Ext.ux.blockly.Blockly', {
                     Blockly.svgResize();
                 },
                 move: function (panel, x, y) {
-
                 }
             }
         });

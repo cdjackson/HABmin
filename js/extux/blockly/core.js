@@ -1,4 +1,4 @@
-/*! ExtBlockly 2014-04-20 */
+/*! ExtBlockly 2014-04-21 */
 /**
  * @license
  * Visual Blocks Editor
@@ -7331,6 +7331,9 @@ Blockly.FieldDropdown.prototype.showEditor_ = function () {
                 // Call any change handler, and allow it to override.
 //                var override = thisField.changeHandler_(value);
                 thisField.changeHandler_(value);
+            }
+            else if (value !== null) {
+                thisField.setValue(value);
             }
         }
     };

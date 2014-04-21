@@ -34,7 +34,7 @@
  *
  * @author Chris Jackson
  */
-Blockly.Blocks['persistence_get'] = {
+Blockly.Blocks['openhab_persistence_get'] = {
     init: function() {
         this.setHelpUrl('http://www.example.com/');
         this.setColour(290);
