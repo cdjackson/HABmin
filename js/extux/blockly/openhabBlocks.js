@@ -38,11 +38,11 @@ Blockly.Blocks['openhab_persistence_get'] = {
     init: function() {
         this.setHelpUrl('http://www.example.com/');
         this.setColour(290);
-        this.appendValueInput("ITEM")
-            .setCheck("String")
+        this.appendDummyInput()
             .setAlign(Blockly.ALIGN_RIGHT)
             .appendField(new Blockly.FieldDropdown([["state", "STATE"], ["average", "AVERAGE"], ["minimum", "MINIMUM"], ["maximum", "MAXIMUM"]]), "TYPE")
-            .appendField("of item");
+            .appendField("of item")
+            .appendField(new Blockly.FieldVariable("Item"), "VAR")
         this.appendValueInput("DAYS")
             .setCheck("Number")
             .setAlign(Blockly.ALIGN_RIGHT)
@@ -61,6 +61,42 @@ Blockly.Blocks['openhab_persistence_get'] = {
             .appendField("seconds");
         this.setOutput(true, ["Number", "String"]);
         this.setTooltip('');
+    },
+    /**
+     * Return all variables referenced by this block.
+     * @return {!Array.<string>} List of variable names.
+     * @this Blockly.Block
+     */
+    getVars: function () {
+        return [this.getFieldValue('VAR')];
+    },
+    /**
+     * Notification that a variable is renaming.
+     * If the name matches one of this block's variables, rename it.
+     * @param {string} oldName Previous name of variable.
+     * @param {string} newName Renamed variable.
+     * @this Blockly.Block
+     */
+    renameVar: function (oldName, newName) {
+        if (Blockly.Names.equals(oldName, this.getFieldValue('VAR'))) {
+            this.setFieldValue(newName, 'VAR');
+        }
+    },
+    /**
+     * Add menu option to create getter/setter block for this setter/getter.
+     * @param {!Array} options List of menu options to add to.
+     * @this Blockly.Block
+     */
+    customContextMenu: function (options) {
+        var option = {enabled: true};
+        var name = this.getFieldValue('VAR');
+        option.text = this.contextMenuMsg_.replace('%1', name);
+        var xmlField = Ext.DomHelper.createDom({tag: "field", children: name})
+        xmlField.setAttribute('name', 'VAR');
+        var xmlBlock = Ext.DomHelper.createDom({tag: "block", children: xmlField})
+        xmlBlock.setAttribute('type', this.contextMenuType_);
+        option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
+        options.push(option);
     }
 };
 
