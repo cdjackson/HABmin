@@ -132,7 +132,7 @@ Ext.define('openHAB.automation.ruleProperties', {
      //       {category: "Math", block: {type:'math_change'}},
             {category: "Math", block: {type:'math_round'}},
      //       {category: "Math", block: {type:'math_modulo'}},
-     //       {category: "Math", block: {type:'math_constrain'}},
+            {category: "Math", block: {type:'math_constrain'}},
      //       {category: "Math", block: {type:'math_random_int'}},
             {category: "Items", block: {type:'variables_set'}},
             {category: "Items", block: {type:'variables_get'}},
