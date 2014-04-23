@@ -107,7 +107,7 @@ Ext.define('Ext.ux.blockly.Blockly', {
                                     me.scrollbar = Blockly.mainWorkspace.scrollbar;
                                     Blockly.mainWorkspace.scrollbar = false;
 
-                                    this.setXConstraint(-200,5000,0);
+//                                    this.setXConstraint(-200,5000,0);
 //                                    this.constrainTo(me.getId(), {left: 0, top: 0, right: -33330, bottom: -3330}, false);
                                 },
                                 getDragData: function (e) {
