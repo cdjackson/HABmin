@@ -114,3 +114,72 @@ Blockly.Blocks['openhab_rule'] = {
         this.setTooltip(language.rule_DesignerRuleTooltip);
     }
 };
+
+Blockly.Blocks['openhab_timer'] = {
+    init: function () {
+        var OPERATORS =
+            [
+                ["While", 'WHILE'],
+                ["Until", 'UNTIL']
+            ];
+        this.setHelpUrl("BLAH");
+        this.setColour(120);
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldDropdown(OPERATORS), 'MODE');
+        this.appendStatementInput('DO')
+            .appendField("Do");
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        // Assign 'this' to a variable for use in the tooltip closure below.
+        var thisBlock = this;
+        this.setTooltip(function () {
+            var op = thisBlock.getFieldValue('MODE');
+            var TOOLTIPS = {
+                WHILE: "While tooltip",
+                UNTIL: "Until tooltip"
+            };
+            return TOOLTIPS[op];
+        });
+    }
+};
+
+Blockly.Blocks['variables_cmd'] = {
+    init: function () {
+        this.setHelpUrl("bla");
+        this.setColour(330);
+        this.interpolateMsg(
+            // TODO: Combine these messages instead of using concatenation.
+                "command" + ' %1 ' +
+                "to" + ' %2',
+            ['VAR', new Blockly.FieldVariable("command")],
+            ['VALUE', null, Blockly.ALIGN_RIGHT],
+            Blockly.ALIGN_RIGHT);
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        this.setTooltip("command tooltip");
+//        this.contextMenuMsg_ = "hello";//Blockly.Msg.VARIABLES_SET_CREATE_GET;
+//        this.contextMenuType_ = 'variables_cmd';
+    },
+    /**
+     * Return all variables referenced by this block.
+     * @return {!Array.<string>} List of variable names.
+     * @this Blockly.Block
+     */
+    getVars: function () {
+        return [this.getFieldValue('VAR')];
+    },
+    /**
+     * Notification that a variable is renaming.
+     * If the name matches one of this block's variables, rename it.
+     * @param {string} oldName Previous name of variable.
+     * @param {string} newName Renamed variable.
+     * @this Blockly.Block
+     */
+    renameVar: function (oldName, newName) {
+        if (Blockly.Names.equals(oldName, this.getFieldValue('VAR'))) {
+            this.setFieldValue(newName, 'VAR');
+        }
+    }
+//    ,
+//    customContextMenu: Blockly.Blocks['variables_cmd'].customContextMenu
+};

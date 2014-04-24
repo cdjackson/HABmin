@@ -116,6 +116,7 @@ Ext.define('openHAB.automation.ruleProperties', {
             {category: "Logic", block: {type:'logic_compare'}},
             {category: "Logic", block: {type:'logic_operation'}},
             {category: "Logic", block: {type:'logic_negate'}},
+            {category: "Logic", block: {type:'openhab_timer'}},
      //       {category: "Logic", block: {type:'logic_boolean'}},
      //       {category: "Logic", block: {type:'logic_ternary'}},
      //       {category: "Loops", block: {type:'controls_whileUntil'}},
@@ -135,6 +136,7 @@ Ext.define('openHAB.automation.ruleProperties', {
             {category: "Math", block: {type:'math_constrain'}},
      //       {category: "Math", block: {type:'math_random_int'}},
             {category: "Items", block: {type:'variables_set'}},
+            {category: "Items", block: {type:'variables_cmd'}},
             {category: "Items", block: {type:'variables_get'}},
             {category: "Items", block: {type:'openhab_persistence_get', children: [
                 {name: 'DAYS', value: 'value', block: {type: 'math_number', fields:[{name: 'NUM', value:'0'}]}},
