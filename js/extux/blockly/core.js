@@ -1,4 +1,4 @@
-/*! ExtBlockly 2014-04-21 */
+/*! ExtBlockly 2014-04-25 */
 /**
  * @license
  * Visual Blocks Editor
@@ -12990,25 +12990,26 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
                     throw 'Child block does not have output or previous statement.';
                 }
             }
-            /*
-             // Next
-             if (child.next &&
-             firstRealGrandchild.nodeName.toLowerCase() == 'block') {
-             if (!block.nextConnection) {
-             throw 'Next statement does not exist.';
-             } else if (block.nextConnection.targetConnection) {
-             // This could happen if there is more than one XML 'next' tag.
-             throw 'Next statement is already connected.';
-             }
-             blockChild = Blockly.Json.domToBlock(workspace, firstRealGrandchild,
-             opt_reuseBlock);
-             if (!blockChild.previousConnection) {
-             throw 'Next block does not have previous statement.';
-             }
-             block.nextConnection.connect(blockChild.previousConnection);
-             }*/
         }
     }
+            // Next
+            if (jsonBlock.next ) {
+//                && firstRealGrandchild.nodeName.toLowerCase() == 'block') {
+                if (!block.nextConnection) {
+                    throw 'Next statement does not exist.';
+                } else if (block.nextConnection.targetConnection) {
+                    // This could happen if there is more than one XML 'next' tag.
+                    throw 'Next statement is already connected.';
+                }
+                blockChild = Blockly.Json.domToBlock(workspace, jsonBlock.next,
+                    opt_reuseBlock);
+                if (!blockChild.previousConnection) {
+                    throw 'Next block does not have previous statement.';
+                }
+                block.nextConnection.connect(blockChild.previousConnection);
+            }
+
+
 
     var collapsed = jsonBlock.collapsed;
     if (collapsed != null) {
@@ -13045,11 +13046,11 @@ Blockly.Json.deleteNext = function (jsonBlock) {
     }
     return;
 
-/*
-    for (var x = 0, child; child = xmlBlock.childNodes[x]; x++) {
-        if (child.nodeName.toLowerCase() == 'next') {
-            xmlBlock.removeChild(child);
-            break;
-        }
-    }*/
+    /*
+     for (var x = 0, child; child = xmlBlock.childNodes[x]; x++) {
+     if (child.nodeName.toLowerCase() == 'next') {
+     xmlBlock.removeChild(child);
+     break;
+     }
+     }*/
 };
