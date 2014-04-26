@@ -67,8 +67,8 @@ Blockly.Blocks['openhab_persistence_get'] = {
      * @return {!Array.<string>} List of variable names.
      * @this Blockly.Block
      */
-    getVars: function () {
-        return [this.getFieldValue('VAR')];
+    getVars: function (varType) {
+        return [this.getFieldValue(varType)];
     },
     /**
      * Notification that a variable is renaming.
@@ -77,9 +77,9 @@ Blockly.Blocks['openhab_persistence_get'] = {
      * @param {string} newName Renamed variable.
      * @this Blockly.Block
      */
-    renameVar: function (oldName, newName) {
-        if (Blockly.Names.equals(oldName, this.getFieldValue('VAR'))) {
-            this.setFieldValue(newName, 'VAR');
+    renameVar: function (varType, oldName, newName) {
+        if (Blockly.Names.equals(oldName, this.getFieldValue(varType))) {
+            this.setFieldValue(newName, varType);
         }
     },
     /**
@@ -165,8 +165,8 @@ Blockly.Blocks['openhab_itemcmd'] = {
      * @return {!Array.<string>} List of variable names.
      * @this Blockly.Block
      */
-    getVars: function () {
-        return [this.getFieldValue('ITEM')];
+    getVars: function (varType) {
+        return [this.getFieldValue(varType)];
     },
     /**
      * Notification that a variable is renaming.
@@ -175,11 +175,11 @@ Blockly.Blocks['openhab_itemcmd'] = {
      * @param {string} newName Renamed variable.
      * @this Blockly.Block
      */
-    renameVar: function (oldName, newName) {
-        if (Blockly.Names.equals(oldName, this.getFieldValue('ITEM'))) {
-            this.setFieldValue(newName, 'ITEM');
+    renameVar: function (varType, oldName, newName) {
+        if (Blockly.Names.equals(oldName, this.getFieldValue(varType))) {
+            this.setFieldValue(newName, varType);
         }
-    }
+    },
 };
 
 Blockly.Blocks['openhab_itemget'] = {
@@ -204,8 +204,8 @@ Blockly.Blocks['openhab_itemget'] = {
      * @return {!Array.<string>} List of variable names.
      * @this Blockly.Block
      */
-    getVars: function () {
-        return [this.getFieldValue('ITEM')];
+    getVars: function (varType) {
+        return [this.getFieldValue(varType)];
     },
     /**
      * Notification that a variable is renaming.
@@ -214,9 +214,9 @@ Blockly.Blocks['openhab_itemget'] = {
      * @param {string} newName Renamed variable.
      * @this Blockly.Block
      */
-    renameVar: function (oldName, newName) {
-        if (Blockly.Names.equals(oldName, this.getFieldValue('ITEM'))) {
-            this.setFieldValue(newName, 'ITEM');
+    renameVar: function (varType, oldName, newName) {
+        if (Blockly.Names.equals(oldName, this.getFieldValue(varType))) {
+            this.setFieldValue(newName, varType);
         }
     },
     /**
@@ -249,7 +249,7 @@ Blockly.Blocks['openhab_itemset'] = {
             // TODO: Combine these messages instead of using concatenation.
                 "Set Item" + ' %1 ' +
                 "to" + ' %2',
-            ['ITEM', new Blockly.FieldVariable("Setx")],
+            ['ITEM', new Blockly.FieldVariable("Item")],
             ['VALUE', null, Blockly.ALIGN_RIGHT],
             Blockly.ALIGN_RIGHT);
         this.setPreviousStatement(true);
@@ -263,8 +263,8 @@ Blockly.Blocks['openhab_itemset'] = {
      * @return {!Array.<string>} List of variable names.
      * @this Blockly.Block
      */
-    getVars: function () {
-        return [this.getFieldValue('ITEM')];
+    getVars: function (varType) {
+        return [this.getFieldValue(varType)];
     },
     /**
      * Notification that a variable is renaming.
@@ -273,9 +273,9 @@ Blockly.Blocks['openhab_itemset'] = {
      * @param {string} newName Renamed variable.
      * @this Blockly.Block
      */
-    renameVar: function (oldName, newName) {
-        if (Blockly.Names.equals(oldName, this.getFieldValue('ITEM'))) {
-            this.setFieldValue(newName, 'ITEM');
+    renameVar: function (varType, oldName, newName) {
+        if (Blockly.Names.equals(oldName, this.getFieldValue(varType))) {
+            this.setFieldValue(newName, varType);
         }
     },
     customContextMenu: Blockly.Blocks['openhab_itemget'].customContextMenu
@@ -288,6 +288,17 @@ Blockly.Blocks['openhab_state_onoff'] = {
         this.setOutput(true, 'State');
         this.appendDummyInput()
             .appendField(new Blockly.FieldDropdown([["On", 'ON'], ["Off", 'OFF']]), 'STATE');
+        this.setTooltip("Tooltip");
+    }
+};
+
+Blockly.Blocks['openhab_state_openclosed'] = {
+    init: function () {
+        this.setHelpUrl("Help");
+        this.setColour(210);
+        this.setOutput(true, 'State');
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldDropdown([["Open", 'OPEN'], ["Closed", 'CLOSED']]), 'STATE');
         this.setTooltip("Tooltip");
     }
 };

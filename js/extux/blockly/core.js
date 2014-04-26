@@ -1,4 +1,4 @@
-/*! ExtBlockly 2014-04-25 */
+/*! ExtBlockly 2014-04-26 */
 /**
  * @license
  * Visual Blocks Editor
@@ -3080,32 +3080,30 @@ Blockly.BlockSvg.prototype.render = function () {
  * @return {number} X-coordinate of the end of the field row (plus a gap).
  * @private
  */
-Blockly.BlockSvg.prototype.renderFields_ = function (fieldList, cursorX, cursorY) {
-    if (Blockly.RTL) {
-        cursorX = -cursorX;
-    }
-    for (var t = 0, field; field = fieldList[t]; t++) {
-        // Get the dimensions of the field.
-        var fieldSize = field.getSize();
-        var fieldWidth = fieldSize.width;
-
+Blockly.BlockSvg.prototype.renderFields_ =
+    function (fieldList, cursorX, cursorY) {
         if (Blockly.RTL) {
-            cursorX -= fieldWidth;
-            field.getRootElement().setAttribute('transform',
-                    'translate(' + cursorX + ', ' + cursorY + ')');
-            if (fieldWidth) {
-                cursorX -= Blockly.BlockSvg.SEP_SPACE_X;
-            }
-        } else {
-            field.getRootElement().setAttribute('transform',
-                    'translate(' + cursorX + ', ' + cursorY + ')');
-            if (fieldWidth) {
-                cursorX += fieldWidth + Blockly.BlockSvg.SEP_SPACE_X;
+            cursorX = -cursorX;
+        }
+        for (var t = 0, field; field = fieldList[t]; t++) {
+            if (Blockly.RTL) {
+                cursorX -= field.renderSep + field.renderWidth;
+                field.getRootElement().setAttribute('transform',
+                        'translate(' + cursorX + ', ' + cursorY + ')');
+                if (field.renderWidth) {
+                    cursorX -= Blockly.BlockSvg.SEP_SPACE_X;
+                }
+            } else {
+                field.getRootElement().setAttribute('transform',
+                        'translate(' + (cursorX + field.renderSep) + ', ' + cursorY + ')');
+                if (field.renderWidth) {
+                    cursorX += field.renderSep + field.renderWidth +
+                        Blockly.BlockSvg.SEP_SPACE_X;
+                }
             }
         }
-    }
-    return Blockly.RTL ? -cursorX : cursorX;
-};
+        return Blockly.RTL ? -cursorX : cursorX;
+    };
 
 /**
  * Computes the height and widths for each row and field.
@@ -3179,14 +3177,19 @@ Blockly.BlockSvg.prototype.renderCompute_ = function (iconWidth) {
             // The first row gets shifted to accommodate any icons.
             input.fieldWidth += Blockly.RTL ? -iconWidth : iconWidth;
         }
+        var previousFieldEditable = false;
         for (var j = 0, field; field = input.fieldRow[j]; j++) {
             if (j != 0) {
                 input.fieldWidth += Blockly.BlockSvg.SEP_SPACE_X;
             }
             // Get the dimensions of the field.
             var fieldSize = field.getSize();
-            input.fieldWidth += fieldSize.width;
+            field.renderWidth = fieldSize.width;
+            field.renderSep = (previousFieldEditable && field.EDITABLE) ?
+                Blockly.BlockSvg.SEP_SPACE_X : 0;
+            input.fieldWidth += field.renderWidth + field.renderSep;
             row.height = Math.max(row.height, fieldSize.height);
+            previousFieldEditable = field.EDITABLE;
         }
 
         if (row.type != Blockly.BlockSvg.INLINE) {
@@ -7367,9 +7370,6 @@ Blockly.FieldDropdown.prototype.showEditor_ = function () {
     var borderBBox = this.borderRect_.getBBox();
 
     Blockly.openMenu = new Ext.menu.Menu(menuCfg);
-//    Blockly.openMenu.alignTo(Ext.get(Blockly.DIV), 'tl',[xy.x-Blockly.clientX,xy.y -Blockly.clientY+ borderBBox.height]);
-//    Blockly.openMenu.alignTo(Ext.get(Blockly.DIV), 'tl-tl');
-
     Blockly.openMenu.showAt(xy.x, xy.y + borderBBox.height);
 };
 
@@ -7853,7 +7853,7 @@ Blockly.FieldVariable.prototype.setValue = function (text) {
  * @this {!Blockly.FieldVariable}
  */
 Blockly.FieldVariable.dropdownCreate = function () {
-    var variableList = Blockly.Variables.allVariables();
+    var variableList = Blockly.Variables.allVariables(this.name);
     // Ensure that the currently selected variable is an option.
     var name = this.getText();
     if (name && variableList.indexOf(name) == -1) {
@@ -7922,7 +7922,7 @@ Blockly.FieldVariable.dropdownChange = function (inputText) {
         ],
         buttons: [
             {
-                text: "cancel",
+                text: "Cancel",
                 handler: function () {
                     this.up('window').destroy();
                 }
@@ -7938,7 +7938,7 @@ Blockly.FieldVariable.dropdownChange = function (inputText) {
                         // Beyond this, all names are legal.
                         newVar && newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
 
-                        Blockly.Variables.renameVariable(oldVar, newVar);
+                        Blockly.Variables.renameVariable("VAR", oldVar, newVar);
                         thisField.setText(newVar);
 
                         this.up('window').destroy();
@@ -11922,7 +11922,7 @@ Blockly.Variables.NAME_TYPE = 'VARIABLE';
  * @param {Blockly.Block=} opt_block Optional root block.
  * @return {!Array.<string>} Array of variable names.
  */
-Blockly.Variables.allVariables = function (opt_block) {
+Blockly.Variables.allVariables = function (varType, opt_block) {
     var blocks;
     if (opt_block) {
         blocks = opt_block.getDescendants();
@@ -11934,7 +11934,7 @@ Blockly.Variables.allVariables = function (opt_block) {
     for (var x = 0; x < blocks.length; x++) {
         var func = blocks[x].getVars;
         if (func) {
-            var blockVariables = func.call(blocks[x]);
+            var blockVariables = func.call(blocks[x], varType);
             for (var y = 0; y < blockVariables.length; y++) {
                 var varName = blockVariables[y];
                 // Variable name may be null if the block is only half-built.
@@ -11954,16 +11954,17 @@ Blockly.Variables.allVariables = function (opt_block) {
 
 /**
  * Find all instances of the specified variable and rename them.
+ * @param {string} varType Variable type. Uses the field name.
  * @param {string} oldName Variable to rename.
  * @param {string} newName New variable name.
  */
-Blockly.Variables.renameVariable = function (oldName, newName) {
+Blockly.Variables.renameVariable = function (varType, oldName, newName) {
     var blocks = Blockly.mainWorkspace.getAllBlocks();
     // Iterate through every block.
     for (var x = 0; x < blocks.length; x++) {
         var func = blocks[x].renameVar;
         if (func) {
-            func.call(blocks[x], oldName, newName);
+            func.call(blocks[x], varType, oldName, newName);
         }
     }
 };
@@ -11976,7 +11977,7 @@ Blockly.Variables.renameVariable = function (oldName, newName) {
  * @param {!Blockly.Workspace} workspace The flyout's workspace.
  */
 Blockly.Variables.flyoutCategory = function (blocks, gaps, margin, workspace) {
-    var variableList = Blockly.Variables.allVariables();
+    var variableList = Blockly.Variables.allVariables(this.name);
     variableList.sort(Blockly.caseInsensitiveCompare);
     // In addition to the user's variables, we also want to display the default
     // variable name at the top.  We also don't want this duplicated if the
@@ -12016,7 +12017,7 @@ Blockly.Variables.flyoutCategory = function (blocks, gaps, margin, workspace) {
  * @return {string} New variable name.
  */
 Blockly.Variables.generateUniqueName = function () {
-    var variableList = Blockly.Variables.allVariables();
+    var variableList = Blockly.Variables.allVariables(this.name);
     var newName = '';
     if (variableList.length) {
         variableList.sort(Blockly.caseInsensitiveCompare);
