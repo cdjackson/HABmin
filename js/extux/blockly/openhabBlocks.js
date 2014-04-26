@@ -280,3 +280,14 @@ Blockly.Blocks['openhab_itemset'] = {
     },
     customContextMenu: Blockly.Blocks['openhab_itemget'].customContextMenu
 };
+
+Blockly.Blocks['openhab_state_onoff'] = {
+    init: function () {
+        this.setHelpUrl("Help");
+        this.setColour(210);
+        this.setOutput(true, 'State');
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldDropdown([["On", 'ON'], ["Off", 'OFF']]), 'STATE');
+        this.setTooltip("Tooltip");
+    }
+};
