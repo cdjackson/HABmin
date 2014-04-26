@@ -109,8 +109,10 @@ Blockly.Blocks['openhab_rule'] = {
             .appendField(new Blockly.FieldTextInput(name,
                 Blockly.Procedures.rename), 'NAME')
             .appendField('', 'PARAMS');
+        this.appendStatementInput('CONSTANT')
+            .appendField("Constants");
         this.appendStatementInput('STACK')
-            .appendField(Blockly.Msg.PROCEDURES_DEFNORETURN_DO);
+            .appendField("Rule");
         this.setTooltip(language.rule_DesignerRuleTooltip);
     }
 };
@@ -179,7 +181,7 @@ Blockly.Blocks['openhab_itemcmd'] = {
         if (Blockly.Names.equals(oldName, this.getFieldValue(varType))) {
             this.setFieldValue(newName, varType);
         }
-    },
+    }
 };
 
 Blockly.Blocks['openhab_itemget'] = {
@@ -301,4 +303,158 @@ Blockly.Blocks['openhab_state_openclosed'] = {
             .appendField(new Blockly.FieldDropdown([["Open", 'OPEN'], ["Closed", 'CLOSED']]), 'STATE');
         this.setTooltip("Tooltip");
     }
+};
+
+Blockly.Blocks['openhab_itemget'] = {
+    /**
+     * Block for variable getter.
+     * @this Blockly.Block
+     */
+    init: function () {
+        this.setHelpUrl("BLAH");
+        this.setColour(290);
+        this.appendDummyInput()
+            .appendField("Get Item")
+            .appendField(new Blockly.FieldVariable(
+                "Item"), 'ITEM');
+        this.setOutput(true);
+        this.setTooltip("Get tooltip");
+        this.contextMenuMsg_ = "Make a set";
+        this.contextMenuType_ = 'openhab_itemset';
+    },
+    /**
+     * Return all variables referenced by this block.
+     * @return {!Array.<string>} List of variable names.
+     * @this Blockly.Block
+     */
+    getVars: function (varType) {
+        return [this.getFieldValue(varType)];
+    },
+    /**
+     * Notification that a variable is renaming.
+     * If the name matches one of this block's variables, rename it.
+     * @param {string} oldName Previous name of variable.
+     * @param {string} newName Renamed variable.
+     * @this Blockly.Block
+     */
+    renameVar: function (varType, oldName, newName) {
+        if (Blockly.Names.equals(oldName, this.getFieldValue(varType))) {
+            this.setFieldValue(newName, varType);
+        }
+    },
+    /**
+     * Add menu option to create getter/setter block for this setter/getter.
+     * @param {!Array} options List of menu options to add to.
+     * @this Blockly.Block
+     */
+    customContextMenu: function (options) {
+        var option = {enabled: true};
+        var name = this.getFieldValue('ITEM');
+        option.text = this.contextMenuMsg_.replace('%1', name);
+        var xmlField = Ext.DomHelper.createDom({tag: "field", children: name})
+        xmlField.setAttribute('name', 'ITEM');
+        var xmlBlock = Ext.DomHelper.createDom({tag: "block", children: xmlField})
+        xmlBlock.setAttribute('type', this.contextMenuType_);
+        option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
+        options.push(option);
+    }
+};
+
+Blockly.Blocks['openhab_constantget'] = {
+    /**
+     * Block for variable getter.
+     * @this Blockly.Block
+     */
+    init: function () {
+        this.setHelpUrl("BLAH");
+        this.setColour(45);
+        this.appendDummyInput()
+            .appendField("Get Constant")
+            .appendField(new Blockly.FieldVariable(
+                "Constant"), 'CONSTANT');
+        this.setOutput(true);
+        this.setTooltip("Get tooltip");
+        this.contextMenuMsg_ = "Make a set";
+        this.contextMenuType_ = 'openhab_constantset';
+    },
+    /**
+     * Return all variables referenced by this block.
+     * @return {!Array.<string>} List of variable names.
+     * @this Blockly.Block
+     */
+    getVars: function (varType) {
+        return [this.getFieldValue(varType)];
+    },
+    /**
+     * Notification that a variable is renaming.
+     * If the name matches one of this block's variables, rename it.
+     * @param {string} oldName Previous name of variable.
+     * @param {string} newName Renamed variable.
+     * @this Blockly.Block
+     */
+    renameVar: function (varType, oldName, newName) {
+        if (Blockly.Names.equals(oldName, this.getFieldValue(varType))) {
+            this.setFieldValue(newName, varType);
+        }
+    },
+    /**
+     * Add menu option to create getter/setter block for this setter/getter.
+     * @param {!Array} options List of menu options to add to.
+     * @this Blockly.Block
+     */
+    customContextMenu: function (options) {
+        var option = {enabled: true};
+        var name = this.getFieldValue('ITEM');
+        option.text = this.contextMenuMsg_.replace('%1', name);
+        var xmlField = Ext.DomHelper.createDom({tag: "field", children: name})
+        xmlField.setAttribute('name', 'CONSTANT');
+        var xmlBlock = Ext.DomHelper.createDom({tag: "block", children: xmlField})
+        xmlBlock.setAttribute('type', this.contextMenuType_);
+        option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
+        options.push(option);
+    }
+};
+
+Blockly.Blocks['openhab_constantset'] = {
+    /**
+     * Block for variable setter.
+     * @this Blockly.Block
+     */
+    init: function () {
+        this.setHelpUrl(Blockly.Msg.VARIABLES_SET_HELPURL);
+        this.setColour(45);
+        this.interpolateMsg(
+            // TODO: Combine these messages instead of using concatenation.
+                "Define Constant" + ' %1 ' +
+                "as" + ' %2',
+            ['CONSTANT', new Blockly.FieldVariable("Constant")],
+            ['VALUE', null, Blockly.ALIGN_RIGHT],
+            Blockly.ALIGN_RIGHT);
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        this.setTooltip("Tooltip");
+        this.contextMenuMsg_ = "Set";
+        this.contextMenuType_ = 'openhab_constantget';
+    },
+    /**
+     * Return all variables referenced by this block.
+     * @return {!Array.<string>} List of variable names.
+     * @this Blockly.Block
+     */
+    getVars: function (varType) {
+        return [this.getFieldValue(varType)];
+    },
+    /**
+     * Notification that a variable is renaming.
+     * If the name matches one of this block's variables, rename it.
+     * @param {string} oldName Previous name of variable.
+     * @param {string} newName Renamed variable.
+     * @this Blockly.Block
+     */
+    renameVar: function (varType, oldName, newName) {
+        if (Blockly.Names.equals(oldName, this.getFieldValue(varType))) {
+            this.setFieldValue(newName, varType);
+        }
+    },
+    customContextMenu: Blockly.Blocks['openhab_constantget'].customContextMenu
 };
