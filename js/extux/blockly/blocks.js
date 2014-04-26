@@ -3239,7 +3239,7 @@ Blockly.Blocks['variables_get'] = {
         this.setHelpUrl(Blockly.Msg.VARIABLES_GET_HELPURL);
         this.setColour(330);
         this.appendDummyInput()
-            .appendField(Blockly.Msg.VARIABLES_GET_ITEM)
+            .appendField(Blockly.Msg.VARIABLES_GET_TITLE)
             .appendField(new Blockly.FieldVariable(
                 Blockly.Msg.VARIABLES_GET_ITEM), 'VAR')
             .appendField(Blockly.Msg.VARIABLES_GET_TAIL);

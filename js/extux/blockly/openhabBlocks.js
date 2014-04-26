@@ -110,6 +110,7 @@ Blockly.Blocks['openhab_rule'] = {
                 Blockly.Procedures.rename), 'NAME')
             .appendField('', 'PARAMS');
         this.appendStatementInput('CONSTANT')
+//            .setNextStatement(true,"Constant")
             .appendField("Constants");
         this.appendStatementInput('STACK')
             .appendField("Rule");
@@ -239,6 +240,28 @@ Blockly.Blocks['openhab_itemget'] = {
     }
 };
 
+Blockly.Blocks['openhab_state_onoff'] = {
+    init: function () {
+        this.setHelpUrl("Help");
+        this.setColour(210);
+        this.setOutput(true, 'State');
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldDropdown([["On", 'ON'], ["Off", 'OFF']]), 'STATE');
+        this.setTooltip("Tooltip");
+    }
+};
+
+Blockly.Blocks['openhab_state_openclosed'] = {
+    init: function () {
+        this.setHelpUrl("Help");
+        this.setColour(210);
+        this.setOutput(true, 'State');
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldDropdown([["Open", 'OPEN'], ["Closed", 'CLOSED']]), 'STATE');
+        this.setTooltip("Tooltip");
+    }
+};
+
 Blockly.Blocks['openhab_itemset'] = {
     /**
      * Block for variable setter.
@@ -281,28 +304,6 @@ Blockly.Blocks['openhab_itemset'] = {
         }
     },
     customContextMenu: Blockly.Blocks['openhab_itemget'].customContextMenu
-};
-
-Blockly.Blocks['openhab_state_onoff'] = {
-    init: function () {
-        this.setHelpUrl("Help");
-        this.setColour(210);
-        this.setOutput(true, 'State');
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldDropdown([["On", 'ON'], ["Off", 'OFF']]), 'STATE');
-        this.setTooltip("Tooltip");
-    }
-};
-
-Blockly.Blocks['openhab_state_openclosed'] = {
-    init: function () {
-        this.setHelpUrl("Help");
-        this.setColour(210);
-        this.setOutput(true, 'State');
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldDropdown([["Open", 'OPEN'], ["Closed", 'CLOSED']]), 'STATE');
-        this.setTooltip("Tooltip");
-    }
 };
 
 Blockly.Blocks['openhab_itemget'] = {
@@ -430,8 +431,8 @@ Blockly.Blocks['openhab_constantset'] = {
             ['CONSTANT', new Blockly.FieldVariable("Constant")],
             ['VALUE', null, Blockly.ALIGN_RIGHT],
             Blockly.ALIGN_RIGHT);
-        this.setPreviousStatement(true);
-        this.setNextStatement(true);
+        this.setPreviousStatement(true, "Constant");
+        this.setNextStatement(true, "Constant");
         this.setTooltip("Tooltip");
         this.contextMenuMsg_ = "Set";
         this.contextMenuType_ = 'openhab_constantget';

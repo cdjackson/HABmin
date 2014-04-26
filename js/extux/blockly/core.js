@@ -275,10 +275,10 @@ Blockly.onMouseUp_ = function (e) {
  * @private
  */
 Blockly.onMouseMove_ = function (e) {
-    console.log("Blockly mouse move (" + Blockly.mainWorkspace.dragMode + ")");
+//    console.log("Blockly mouse move (" + Blockly.mainWorkspace.dragMode + ")");
 
     if (Blockly.mainWorkspace.dragMode) {
-        console.log("Dragging!!!");
+//        console.log("Dragging!!!");
         Blockly.removeAllRanges();
         var dx = e.clientX - Blockly.mainWorkspace.startDragMouseX;
         var dy = e.clientY - Blockly.mainWorkspace.startDragMouseY;
@@ -5397,15 +5397,18 @@ Blockly.Connection.prototype.closest = function (maxLimit, dx, dy) {
 Blockly.Connection.prototype.checkType_ = function (otherConnection) {
     if (!this.check_ || !otherConnection.check_) {
         // One or both sides are promiscuous enough that anything will fit.
+        console.log("checkType: promiscuous");
         return true;
     }
     // Find any intersection in the check lists.
     for (var x = 0; x < this.check_.length; x++) {
         if (otherConnection.check_.indexOf(this.check_[x]) != -1) {
+            console.log("checkType: Yes");
             return true;
         }
     }
     // No intersection.
+    console.log("checkType: Nope");
     return false;
 };
 
@@ -7938,7 +7941,7 @@ Blockly.FieldVariable.dropdownChange = function (inputText) {
                         // Beyond this, all names are legal.
                         newVar && newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
 
-                        Blockly.Variables.renameVariable("VAR", oldVar, newVar);
+                        Blockly.Variables.renameVariable(thisField.name, oldVar, newVar);
                         thisField.setText(newVar);
 
                         this.up('window').destroy();
@@ -9861,6 +9864,8 @@ Blockly.Names.prototype.safeName_ = function (name) {
  * @return {boolean} True if names are the same.
  */
 Blockly.Names.equals = function (name1, name2) {
+    if(name1 == null || name2 == null)
+        return false;
     return name1.toLowerCase() == name2.toLowerCase();
 };
 
