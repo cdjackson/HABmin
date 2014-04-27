@@ -1,4 +1,4 @@
-/*! ExtBlockly 2014-04-26 */
+/*! ExtBlockly 2014-04-27 */
 /**
  * @license
  * Visual Blocks Editor
@@ -1078,7 +1078,7 @@ Blockly.Blocks['logic_operation'] = {
      * @this Blockly.Block
      */
     init: function () {
-        var OPERATORS =
+        this.OPERATORS =
             [
                 [Blockly.Msg.LOGIC_OPERATION_AND, 'AND'],
                 [Blockly.Msg.LOGIC_OPERATION_OR, 'OR']
@@ -1086,22 +1086,166 @@ Blockly.Blocks['logic_operation'] = {
         this.setHelpUrl(Blockly.Msg.LOGIC_OPERATION_HELPURL);
         this.setColour(210);
         this.setOutput(true, 'Boolean');
-        this.appendValueInput('A')
+        this.appendValueInput('IN0')
             .setCheck('Boolean');
-        this.appendValueInput('B')
+        this.appendValueInput('IN1')
             .setCheck('Boolean')
-            .appendField(new Blockly.FieldDropdown(OPERATORS), 'OP');
+            .appendField(new Blockly.FieldDropdown(this.OPERATORS), 'OP1');
         this.setInputsInline(true);
+        this.setMutator(new Blockly.Mutator(['logic_compare_number']));
         // Assign 'this' to a variable for use in the tooltip closure below.
         var thisBlock = this;
         this.setTooltip(function () {
-            var op = thisBlock.getFieldValue('OP');
+            var op = thisBlock.getFieldValue('OP1');
             var TOOLTIPS = {
                 AND: Blockly.Msg.LOGIC_OPERATION_TOOLTIP_AND,
                 OR: Blockly.Msg.LOGIC_OPERATION_TOOLTIP_OR
             };
             return TOOLTIPS[op];
         });
+    },
+    /**
+     * Create XML to represent the number of else-if and else inputs.
+     * @return {Element} XML storage element.
+     * @this Blockly.Block
+     */
+    mutationToDom: function () {
+        if (!this.opCount_) {
+            return null;
+        }
+
+        var container = [];
+        if (this.opCount_) {
+            var parameter = {};
+            parameter.name = 'operators';
+            parameter.value = this.opCount_;
+            container.push(parameter);
+        }
+        return container;
+    },
+    domToMutation: function (xmlElement) {
+        this.arguments_ = [];
+        var elements = [].concat(xmlElement);
+        for (var x = 0; x < elements.length; x++) {
+            if (elements[x].name.toLowerCase() == 'operators') {
+                this.opCount_ = parseInt(elements[x].value, 10);
+            }
+
+            for (var x = this.opCount_; x > 0; x--) {
+                var ifInput = this.appendValueInput('IN' + (this.opCount_ + 1))
+//                        .setCheck('Boolean')
+                    .appendField(new Blockly.FieldDropdown(this.OPERATORS), 'OP' + (this.opCount_ + 1));
+            }
+        }
+    },
+    decompose: function (workspace) {
+        var containerBlock = Blockly.Block.obtain(workspace, 'logic_compare_base');
+        containerBlock.initSvg();
+        var connection = containerBlock.getInput('STACK').connection;
+        for (var x = 1; x <= this.opCount_; x++) {
+            var numberBlock = Blockly.Block.obtain(workspace, 'logic_compare_number');
+            numberBlock.initSvg();
+            connection.connect(numberBlock.previousConnection);
+            connection = numberBlock.nextConnection;
+        }
+        return containerBlock;
+    },
+    /**
+     * Reconfigure this block based on the mutator dialog's components.
+     * @param {!Blockly.Block} containerBlock Root block in mutator.
+     * @this Blockly.Block
+     */
+    compose: function (containerBlock) {
+        // this.opCount_ = 0;
+        // Disconnect all the input blocks and remove the inputs.
+        for (var x = this.opCount_; x > 0; x--) {
+            this.removeInput('IN' + (x + 1));
+            this.removeInput('OP' + (x + 1));
+        }
+        this.opCount_ = 0;
+        // Rebuild the block's optional inputs.
+        var clauseBlock = containerBlock.getInputTargetBlock('STACK');
+        while (clauseBlock) {
+            switch (clauseBlock.type) {
+                case 'logic_compare_number':
+                    this.opCount_++;
+
+                    var ifInput = this.appendValueInput('IN' + (this.opCount_ + 1))
+//                        .setCheck('Boolean')
+                        .appendField(new Blockly.FieldDropdown(this.OPERATORS), 'OP' + (this.opCount_ + 1));
+
+
+                    // Reconnect any child blocks.
+                    if (clauseBlock.valueConnection_) {
+                        ifInput.connection.connect(clauseBlock.valueConnection_);
+                    }
+                    if (clauseBlock.statementConnection_) {
+                        doInput.connection.connect(clauseBlock.statementConnection_);
+                    }
+                    break;
+                default:
+                    throw 'Unknown block type.';
+            }
+            clauseBlock = clauseBlock.nextConnection &&
+                clauseBlock.nextConnection.targetBlock();
+        }
+    },
+    /**
+     * Store pointers to any connected child blocks.
+     * @param {!Blockly.Block} containerBlock Root block in mutator.
+     * @this Blockly.Block
+     */
+    saveConnections: function (containerBlock) {
+        var clauseBlock = containerBlock.getInputTargetBlock('STACK');
+        var x = 1;
+        while (clauseBlock) {
+            switch (clauseBlock.type) {
+                case 'logic_compare_number':
+                    var inputIf = this.getInput('IN' + x);
+                    var inputDo = this.getInput('OP' + x);
+                    clauseBlock.valueConnection_ =
+                        inputIf && inputIf.connection.targetConnection;
+                    clauseBlock.statementConnection_ =
+                        inputDo && inputDo.connection.targetConnection;
+                    x++;
+                    break;
+                default:
+                    throw 'Unknown block type.';
+            }
+            clauseBlock = clauseBlock.nextConnection &&
+                clauseBlock.nextConnection.targetBlock();
+        }
+    }
+};
+
+Blockly.Blocks['logic_compare_base'] = {
+    /**
+     * Mutator block for compare container.
+     * @this Blockly.Block
+     */
+    init: function () {
+        this.setColour(210);
+        this.appendDummyInput()
+            .appendField("Logic Compare");
+        this.appendStatementInput('STACK');
+        this.setTooltip(Blockly.Msg.CONTROLS_IF_IF_TOOLTIP);
+        this.contextMenu = false;
+    }
+};
+
+Blockly.Blocks['logic_compare_number'] = {
+    /**
+     * Mutator block for additional numbers.
+     * @this Blockly.Block
+     */
+    init: function () {
+        this.setColour(210);
+        this.appendDummyInput()
+            .appendField("number");
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        this.setTooltip("number tooltip");
+        this.contextMenu = false;
     }
 };
 

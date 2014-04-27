@@ -111,7 +111,7 @@ Blockly.Blocks['openhab_rule'] = {
             .appendField('', 'PARAMS');
         this.appendStatementInput('CONSTANT')
 //            .setNextStatement(true,"Constant")
-            .appendField("Constants");
+            .appendField("Definitions");
         this.appendStatementInput('STACK')
             .appendField("Rule");
         this.setTooltip(language.rule_DesignerRuleTooltip);
