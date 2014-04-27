@@ -138,18 +138,19 @@ Ext.define('openHAB.automation.ruleProperties', {
             {category: "Items", block: {type:'openhab_itemset'}},
             {category: "Items", block: {type:'openhab_itemget'}},
             {category: "Items", block: {type:'openhab_itemcmd'}},
-            {category: "Items", block: {type:'variables_set'}},
-            {category: "Items", block: {type:'variables_get'}},
-            {category: "Items", block: {type:'openhab_constantget'}},
-            {category: "Items", block: {type:'openhab_constantset'}},
-            {category: "Items", block: {type:'openhab_state_onoff'}},
-            {category: "Items", block: {type:'openhab_state_openclosed'}},
             {category: "Items", block: {type:'openhab_persistence_get', children: [
                 {name: 'DAYS', value: 'value', block: {type: 'math_number', fields:[{name: 'NUM', value:'0'}]}},
                 {name: 'HOURS', value: 'value', block: {type: 'math_number', fields:[{name: 'NUM', value:'0'}]}},
                 {name: 'MINUTES', value: 'value', block: {type: 'math_number', fields:[{name: 'NUM', value:'0'}]}},
                 {name: 'SECONDS', value: 'value', block: {type: 'math_number', fields:[{name: 'NUM', value:'0'}]}}
-            ]}}//,
+            ]}},
+            {category: "Items", block: {type:'variables_set'}},
+            {category: "Items", block: {type:'variables_get'}},
+            {category: "Items", block: {type:'openhab_constantget'}},
+            {category: "Items", block: {type:'openhab_constantset'}},
+            {category: "Items", block: {type:'openhab_state_onoff'}},
+            {category: "Items", block: {type:'openhab_state_openclosed'}}
+                //,
 //            {category: "Functions", block: {type:'procedures_ifreturn'}}
         ];
 
