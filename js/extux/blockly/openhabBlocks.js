@@ -39,26 +39,17 @@ Blockly.Blocks['openhab_persistence_get'] = {
         this.setHelpUrl('http://www.example.com/');
         this.setColour(290);
         this.appendDummyInput()
-            .setAlign(Blockly.ALIGN_RIGHT)
+            .setAlign(Blockly.ALIGN_LEFT)
+            .appendField("Get")
             .appendField(new Blockly.FieldDropdown([["state", "STATE"], ["average", "AVERAGE"], ["minimum", "MINIMUM"], ["maximum", "MAXIMUM"]]), "TYPE")
-            .appendField("of item")
+            .appendField("of Item")
             .appendField(new Blockly.FieldVariable("Item"), "ITEM")
-        this.appendValueInput("DAYS")
-            .setCheck("Number")
+        this.appendDummyInput()
             .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField("days");
-        this.appendValueInput("HOURS")
-            .setCheck("Number")
-            .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField("hours");
-        this.appendValueInput("MINUTES")
-            .setCheck("Number")
-            .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField("minutes");
-        this.appendValueInput("SECONDS")
-            .setCheck("Number")
-            .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField("seconds");
+            .appendField(new Blockly.FieldTextInput('0',
+                Blockly.FieldTextInput.numberValidator), 'NUM')
+            .appendField(new Blockly.FieldDropdown([["seconds", "SECONDS"], ["minutes", "MINUTES"], ["hours", "HOURS"]]), "PERIOD")
+            .appendField("ago")
         this.setOutput(true, ["Number", "String"]);
         this.setTooltip('');
     },
