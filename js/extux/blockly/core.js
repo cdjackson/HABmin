@@ -1,4 +1,4 @@
-/*! ExtBlockly 2014-04-27 */
+/*! ExtBlockly 2014-04-28 */
 /**
  * @license
  * Visual Blocks Editor
@@ -12904,14 +12904,16 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
     var block = null;
     var prototypeName = jsonBlock.type;
     if (!prototypeName) {
-        throw 'Block type unspecified: \n';
+        console.log('Block type unspecified');
+        return null;
     }
     var id = jsonBlock.id;
     if (opt_reuseBlock && id) {
         block = Blockly.Block.getById(id, workspace);
         // TODO: The following is for debugging.  It should never actually happen.
         if (!block) {
-            throw 'Couldn\'t get Block with id: ' + id;
+            console.log('Couldn\'t get Block with id: ' + id);
+            return null;
         }
         var parentBlock = block.getParent();
         // If we've already filled this block then we will dispose of it and then
@@ -12987,7 +12989,8 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
             if (child.block != null) {
                 input = block.getInput(child.name);
                 if (!input) {
-                    throw 'Input ' + child.name + ' does not exist in block ' + prototypeName;
+                    console.log('Input ' + child.name + ' does not exist in block ' + prototypeName);
+                    continue;
                 }
                 blockChild = Blockly.Json.domToBlock(workspace, child.block, opt_reuseBlock);
                 if (blockChild.outputConnection) {
@@ -12995,28 +12998,29 @@ Blockly.Json.domToBlock = function (workspace, jsonBlock, opt_reuseBlock) {
                 } else if (blockChild.previousConnection) {
                     input.connection.connect(blockChild.previousConnection);
                 } else {
-                    throw 'Child block does not have output or previous statement.';
+                    console.log('Child block does not have output or previous statement.');
                 }
             }
         }
     }
-            // Next
-            if (jsonBlock.next ) {
+    // Next
+    if (jsonBlock.next) {
 //                && firstRealGrandchild.nodeName.toLowerCase() == 'block') {
-                if (!block.nextConnection) {
-                    throw 'Next statement does not exist.';
-                } else if (block.nextConnection.targetConnection) {
-                    // This could happen if there is more than one XML 'next' tag.
-                    throw 'Next statement is already connected.';
-                }
-                blockChild = Blockly.Json.domToBlock(workspace, jsonBlock.next,
-                    opt_reuseBlock);
-                if (!blockChild.previousConnection) {
-                    throw 'Next block does not have previous statement.';
-                }
-                block.nextConnection.connect(blockChild.previousConnection);
-            }
-
+        if (!block.nextConnection) {
+            console.log('Next statement does not exist.');
+        } else if (block.nextConnection.targetConnection) {
+            // This could happen if there is more than one XML 'next' tag.
+            console.log('Next statement is already connected.');
+        }
+        blockChild = Blockly.Json.domToBlock(workspace, jsonBlock.next,
+            opt_reuseBlock);
+        if (!blockChild.previousConnection) {
+            console.log('Next block does not have previous statement.');
+        }
+        else {
+            block.nextConnection.connect(blockChild.previousConnection);
+        }
+    }
 
 
     var collapsed = jsonBlock.collapsed;
