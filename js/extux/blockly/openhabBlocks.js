@@ -35,23 +35,28 @@
  * @author Chris Jackson
  */
 Blockly.Blocks['openhab_persistence_get'] = {
-    init: function() {
+    init: function () {
         this.setHelpUrl('http://www.example.com/');
         this.setColour(290);
         this.appendDummyInput()
             .setAlign(Blockly.ALIGN_LEFT)
             .appendField("Get")
-            .appendField(new Blockly.FieldDropdown([["state", "STATE"], ["average", "AVERAGE"], ["minimum", "MINIMUM"], ["maximum", "MAXIMUM"]]), "TYPE")
+            .appendField(new Blockly.FieldDropdown([
+                ["state", "STATE"],
+                ["average", "AVERAGE"],
+                ["minimum", "MINIMUM"],
+                ["maximum", "MAXIMUM"]
+            ]), "TYPE")
             .appendField("of Item")
-            .appendField(new Blockly.FieldVariable("Item"), "ITEM")
+            .appendField(new Blockly.FieldVariable("Item"), "ITEM");
         this.appendDummyInput()
             .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField(new Blockly.FieldTextInput('0',
-                Blockly.FieldTextInput.numberValidator), 'NUM')
-            .appendField(new Blockly.FieldDropdown([["seconds", "SECONDS"], ["minutes", "MINUTES"], ["hours", "HOURS"]]), "PERIOD")
-            .appendField("ago")
+            .appendField("since")
+            .appendField(new Blockly.FieldDropdown([
+                ["midnight", "MIDNIGHT"],
+                ["current time", "TIME"]
+            ], this.customChangeHandler), "SINCE");
         this.setOutput(true, ["Number", "String"]);
-        this.setTooltip('');
     },
     /**
      * Return all variables referenced by this block.
@@ -82,12 +87,33 @@ Blockly.Blocks['openhab_persistence_get'] = {
         var option = {enabled: true};
         var name = this.getFieldValue('VAR');
         option.text = this.contextMenuMsg_.replace('%1', name);
-        var xmlField = Ext.DomHelper.createDom({tag: "field", children: name})
+        var xmlField = Ext.DomHelper.createDom({tag: "field", children: name});
         xmlField.setAttribute('name', 'VAR');
-        var xmlBlock = Ext.DomHelper.createDom({tag: "block", children: xmlField})
+        var xmlBlock = Ext.DomHelper.createDom({tag: "block", children: xmlField});
         xmlBlock.setAttribute('type', this.contextMenuType_);
         option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
         options.push(option);
+    },
+    customChangeHandler: function (option) {
+        this.setValue(option);
+        // Rebuild the block's optional inputs.
+        if(option == 'TIME') {
+            this.sourceBlock_.appendDummyInput("TIME")
+                .setAlign(Blockly.ALIGN_RIGHT)
+                .appendField("minus")
+                .appendField(new Blockly.FieldTextInput('0',
+                    Blockly.FieldTextInput.numberValidator), 'NUM')
+                .appendField(new Blockly.FieldDropdown([
+                    ["seconds", "SECONDS"],
+                    ["minutes", "MINUTES"],
+                    ["hours", "HOURS"]
+                ]), "PERIOD");
+
+        }
+        else {
+            this.sourceBlock_.removeInput("TIME");
+        }
+        this.sourceBlock_.render();
     }
 };
 
@@ -121,7 +147,11 @@ Blockly.Blocks['openhab_iftimer'] = {
             .appendField("For")
             .appendField(new Blockly.FieldTextInput('0',
                 Blockly.FieldTextInput.numberValidator), 'NUM')
-            .appendField(new Blockly.FieldDropdown([["seconds", "SECONDS"], ["minutes", "MINUTES"], ["hours", "HOURS"]]), "PERIOD");
+            .appendField(new Blockly.FieldDropdown([
+                ["seconds", "SECONDS"],
+                ["minutes", "MINUTES"],
+                ["hours", "HOURS"]
+            ]), "PERIOD");
         this.appendStatementInput('DO0')
             .appendField("Do");
         this.setPreviousStatement(true);
@@ -237,7 +267,10 @@ Blockly.Blocks['openhab_state_onoff'] = {
         this.setColour(210);
         this.setOutput(true, 'State');
         this.appendDummyInput()
-            .appendField(new Blockly.FieldDropdown([["On", 'ON'], ["Off", 'OFF']]), 'STATE');
+            .appendField(new Blockly.FieldDropdown([
+                ["On", 'ON'],
+                ["Off", 'OFF']
+            ]), 'STATE');
         this.setTooltip("Tooltip");
     }
 };
@@ -248,7 +281,10 @@ Blockly.Blocks['openhab_state_openclosed'] = {
         this.setColour(210);
         this.setOutput(true, 'State');
         this.appendDummyInput()
-            .appendField(new Blockly.FieldDropdown([["Open", 'OPEN'], ["Closed", 'CLOSED']]), 'STATE');
+            .appendField(new Blockly.FieldDropdown([
+                ["Open", 'OPEN'],
+                ["Closed", 'CLOSED']
+            ]), 'STATE');
         this.setTooltip("Tooltip");
     }
 };
