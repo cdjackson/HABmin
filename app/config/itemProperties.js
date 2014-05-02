@@ -399,7 +399,7 @@ Ext.define('openHAB.config.itemProperties', {
         var statusBar = Ext.create('Ext.ux.StatusBar', {text: '-', items: [helpStatusText]});
 
         var itemGroups = Ext.create('openHAB.config.groupTree');
-        var itemRules = Ext.create('openHAB.config.itemRules');
+//        var itemRules = Ext.create('openHAB.config.itemRules');
         var itemBindings = Ext.create('openHAB.config.itemBindings');
 
         // Create the tab container for the item configuration
@@ -408,7 +408,8 @@ Ext.define('openHAB.config.itemProperties', {
 //            itemId: 'itemProperties',
             bbar: statusBar,
             border: false,
-            items: [itemProperties, itemGroups, itemRules, itemBindings],
+            items: [itemProperties, itemGroups, itemBindings],
+//            items: [itemProperties, itemGroups, itemRules, itemBindings],
             listeners: {
                 beforetabchange: function (tabPanel, newCard, oldCard, eOpts) {
                     // Detect if we've changed view so we can collate the data from the sub-tabs
@@ -442,7 +443,7 @@ Ext.define('openHAB.config.itemProperties', {
                     var tbProperties = itemProperties.getDockedComponent('toolbar');
                     var tbBinding = itemBindings.getDockedComponent('toolbar');
                     var tbGroup = itemGroups.getDockedComponent('toolbar');
-                    var tbRules = itemRules.getDockedComponent('toolbar');
+//                    var tbRules = itemRules.getDockedComponent('toolbar');
                     if (stCancel == true) {
                         if (tbProperties != null)
                             tbProperties.getComponent('cancel').disable();
@@ -450,8 +451,8 @@ Ext.define('openHAB.config.itemProperties', {
                             tbBinding.getComponent('cancel').disable();
                         if (tbGroup != null)
                             tbGroup.getComponent('cancel').disable();
-                        if (tbRules != null)
-                            tbRules.getComponent('cancel').disable();
+//                        if (tbRules != null)
+//                            tbRules.getComponent('cancel').disable();
                     }
                     else {
                         if (tbProperties != null)
@@ -460,8 +461,8 @@ Ext.define('openHAB.config.itemProperties', {
                             tbBinding.getComponent('cancel').enable();
                         if (tbGroup != null)
                             tbGroup.getComponent('cancel').enable();
-                        if (tbRules != null)
-                            tbRules.getComponent('cancel').enable();
+//                        if (tbRules != null)
+//                            tbRules.getComponent('cancel').enable();
                     }
                     if (stSave == true) {
                         if (tbProperties != null)
@@ -470,8 +471,8 @@ Ext.define('openHAB.config.itemProperties', {
                             tbBinding.getComponent('save').disable();
                         if (tbGroup != null)
                             tbGroup.getComponent('save').disable();
-                        if (tbRules != null)
-                            tbRules.getComponent('save').disable();
+//                        if (tbRules != null)
+//                            tbRules.getComponent('save').disable();
                     }
                     else {
                         if (tbProperties != null)
@@ -480,8 +481,8 @@ Ext.define('openHAB.config.itemProperties', {
                             tbBinding.getComponent('save').enable();
                         if (tbGroup != null)
                             tbGroup.getComponent('save').enable();
-                        if (tbRules != null)
-                            tbRules.getComponent('save').enable();
+//                        if (tbRules != null)
+//                            tbRules.getComponent('save').enable();
                     }
                 }
             }
@@ -561,7 +562,7 @@ Ext.define('openHAB.config.itemProperties', {
                     me.updatePersistenceItemProperties(json);
                 }
             });
-
+/*
             // Load the rules for this item
             Ext.Ajax.request({
                 url: HABminBaseURL + '/config/rules/item/' + itemName,
@@ -576,7 +577,7 @@ Ext.define('openHAB.config.itemProperties', {
 
                     me.updateExtendedItemProperties(json);
                 }
-            });
+            });*/
 
             // This is an existing item, so we don't allow the item name to be edited.
             newItem = false;
@@ -659,7 +660,7 @@ Ext.define('openHAB.config.itemProperties', {
                 save.disable();
 
             // Set the item name in the rules tab
-            itemRules.setItem(json.name);
+//            itemRules.setItem(json.name);
 
             // Helper function to make above code more readable
             function setValue(val) {
