@@ -79,6 +79,38 @@ Blockly.Blocks['openhab_persistence_get'] = {
         }
     },
     /**
+     * Create XML to represent the number of else-if and else inputs.
+     * @return {Element} XML storage element.
+     * @this Blockly.Block
+     */
+    mutationToDom: function () {
+        var parameter = {};
+        parameter.name = 'SINCE';
+        parameter.value = this.getFieldValue('SINCE');
+        var container = [];
+        container.push(parameter);
+
+        return container;
+    },
+    domToMutation: function (xmlElement) {
+        this.arguments_ = [];
+        var elements = [].concat(xmlElement);
+        for (var x = 0; x < elements.length; x++) {
+            if (elements[x].name.toLowerCase() == 'since' && elements[x].value.toLowerCase() == "time") {
+                this.appendDummyInput("TIME")
+                    .setAlign(Blockly.ALIGN_RIGHT)
+                    .appendField("minus")
+                    .appendField(new Blockly.FieldTextInput('0',
+                        Blockly.FieldTextInput.numberValidator), 'NUM')
+                    .appendField(new Blockly.FieldDropdown([
+                        ["seconds", "SECONDS"],
+                        ["minutes", "MINUTES"],
+                        ["hours", "HOURS"]
+                    ]), "PERIOD");
+            }
+        }
+    },
+    /**
      * Add menu option to create getter/setter block for this setter/getter.
      * @param {!Array} options List of menu options to add to.
      * @this Blockly.Block
