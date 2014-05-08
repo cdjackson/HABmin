@@ -1,4 +1,4 @@
-/*! ExtBlockly 2014-04-28 */
+/*! ExtBlockly 2014-05-08 */
 /**
  * @license
  * Visual Blocks Editor
@@ -1131,10 +1131,10 @@ Blockly.Blocks['logic_operation'] = {
                 this.opCount_ = parseInt(elements[x].value, 10);
             }
 
-            for (var x = this.opCount_; x > 0; x--) {
-                var ifInput = this.appendValueInput('IN' + (this.opCount_ + 1))
-//                        .setCheck('Boolean')
-                    .appendField(new Blockly.FieldDropdown(this.OPERATORS), 'OP' + (this.opCount_ + 1));
+            for (var x = 1; x <= this.opCount_; x++) {
+                this.appendValueInput('IN' + (x+1))
+                    .setCheck('Boolean')
+                    .appendField(new Blockly.FieldDropdown(this.OPERATORS), 'OP' + (x+1));
             }
         }
     },
@@ -1171,9 +1171,8 @@ Blockly.Blocks['logic_operation'] = {
                     this.opCount_++;
 
                     var ifInput = this.appendValueInput('IN' + (this.opCount_ + 1))
-//                        .setCheck('Boolean')
+                        .setCheck('Boolean')
                         .appendField(new Blockly.FieldDropdown(this.OPERATORS), 'OP' + (this.opCount_ + 1));
-
 
                     // Reconnect any child blocks.
                     if (clauseBlock.valueConnection_) {
@@ -1184,7 +1183,7 @@ Blockly.Blocks['logic_operation'] = {
                     }
                     break;
                 default:
-                    throw 'Unknown block type.';
+                    console.log('Unknown block type ' + clauseBlock.type);
             }
             clauseBlock = clauseBlock.nextConnection &&
                 clauseBlock.nextConnection.targetBlock();

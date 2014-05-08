@@ -1,4 +1,4 @@
-/*! ExtBlockly 2014-04-28 */
+/*! ExtBlockly 2014-05-08 */
 /**
  * @license
  * Visual Blocks Editor
@@ -7641,7 +7641,7 @@ Blockly.FieldImage.prototype.setValue = function (src) {
     }
     this.src_ = src;
     this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
-        'xlink:href', goog.isString(src) ? src : '');
+        'xlink:href', typeof src == "string" ? src : '');
 };
 
 /**
@@ -12631,6 +12631,11 @@ Blockly.Workspace.prototype.traceOn = function (armed) {
  * @param {?string} id ID of block to find.
  */
 Blockly.Workspace.prototype.highlightBlock = function (id) {
+    if (this.traceOn_ && Blockly.Block.dragMode_ != 0) {
+        // The blocklySelectChange event normally prevents this, but sometimes
+        // there is a race condition on fast-executing apps.
+        this.traceOn(false);
+    }
     if (!this.traceOn_) {
         return;
     }
