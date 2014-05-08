@@ -144,7 +144,8 @@ Ext.define('openHAB.automation.ruleProperties', {
             {category: "Items", block: {type:'openhab_constantget'}},
             {category: "Items", block: {type:'openhab_constantset'}},
             {category: "Items", block: {type:'openhab_state_onoff'}},
-            {category: "Items", block: {type:'openhab_state_openclosed'}}
+            {category: "Items", block: {type:'openhab_state_openclosed'}},
+            {category: "Items", block: {type:'text'}}
                 //,
 //            {category: "Functions", block: {type:'procedures_ifreturn'}}
         ];
