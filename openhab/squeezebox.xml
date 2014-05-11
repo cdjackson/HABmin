@@ -1,0 +1,65 @@
+<!-- Binding configuration for the Squeezebox binding in openHAB -->
+<binding>
+	<!-- Full name presented to the user -->
+	<name>Squeezebox Binding</name>
+	<!-- PID name used within the OSGi layer -->
+	<pid>squeeze</pid>
+	<!-- Binding type: protocol, ui -->
+	<type>protocol</type>
+	<!-- Author -->
+	<author>Markus Wolters</author>
+	<!-- Current version of the binding to which the file is applicable -->
+	<version>1.3.0</version>
+	<!-- Minimum version of openHAB required to run this binding -->
+	<oh_version>1.3.0</oh_version>
+
+    <!-- Binding configuration settings -->
+    <binding.config>
+        <config.setting>
+            <name>server.host</name>
+            <label>Squeeze Server Host</label>
+            <description>The Squeeze Server host address.</description>
+            <optional>false</optional>
+            <defaultvalue></defaultvalue>
+            <minimum></minimum>
+            <maximum></maximum>
+            <values></values>
+        </config.setting>
+        <config.setting>
+            <name>server.cliport</name>
+            <label>Squeeze Server CLI Port</label>
+            <description>The CLI port of the Squeeze Server.</description>
+            <optional>true</optional>
+            <defaultvalue>9090</defaultvalue>
+            <minimum></minimum>
+            <maximum></maximum>
+            <values></values>
+        </config.setting>
+        <config.setting>
+            <name>server.webport</name>
+            <label>Squeeze Server Web Port</label>
+            <description>The Web port of the Squeeze Server.</description>
+            <optional>true</optional>
+            <defaultvalue>9000</defaultvalue>
+            <minimum></minimum>
+            <maximum></maximum>
+            <values></values>
+        </config.setting>
+        <config.setting>
+            <name>player.id</name>
+            <label>Player MAC address</label>
+            <description>The MAC address of a Squeezebox player (multiple).</description>
+            <optional>true</optional>
+            <defaultvalue></defaultvalue>
+            <minimum></minimum>
+            <maximum></maximum>
+            <values></values>
+        </config.setting>
+    </binding.config>
+
+    <!-- Item binding configuration -->
+    <binding.items>
+        <binding.io>
+        </binding.io>
+    </binding.items>
+</binding>
