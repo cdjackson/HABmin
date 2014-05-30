@@ -147,7 +147,7 @@ var itemTypeArray = [
     {name: "ContactItem", icon: "images/door-open.png"},
     {name: "DateTimeItem", icon: "images/clock.png"},
     {name: "DimmerItem", icon: "images/ui-slider.png"},
-    {name: "RollerShutterItem", icon: "images/curtain.png"},
+    {name: "RollershutterItem", icon: "images/curtain.png"},
     {name: "StringItem", icon: "images/edit.png"}
 ];
 
