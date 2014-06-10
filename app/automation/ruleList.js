@@ -40,53 +40,127 @@ Ext.define('openHAB.automation.ruleList', {
     extend: 'Ext.panel.Panel',
     layout: 'fit',
     icon: 'images/application-list.png',
+    items: [],
 
     initComponent: function () {
         this.title = language.rule_ListTitle;
 
+        var me = this;
+
+        var toolbar = Ext.create('Ext.toolbar.Toolbar', {
+            items: [
+                {
+                    icon: 'images/minus-button.png',
+                    itemId: 'delete',
+                    text: language.delete,
+                    cls: 'x-btn-icon',
+                    disabled: true,
+                    tooltip: language.rule_ListDeleteTip,
+                    handler: function () {
+                        // Get the item name to delete
+                        var record = ruleList.getSelectionModel().getSelection()[0];
+                        if (record == null)
+                            return;
+
+                        // Make sure we really want to do this!!!
+                        var ruleName = record.get('name');
+                        Ext.Msg.show({
+                            title: language.rule_ListConfirmDeleteTitle,
+                            msg: sprintf(language.rule_ListConfirmDeleteMsg, ruleName),
+                            buttons: Ext.Msg.YESNO,
+                            config: {
+                                obj: this,
+                                name: ruleName,
+                                id: record.get('id')
+                            },
+                            fn: deleteRule,
+                            icon: Ext.MessageBox.QUESTION
+                        });
+                    }
+                },
+                {
+                    icon: 'images/plus-button.png',
+                    itemId: 'add',
+                    text: language.add,
+                    cls: 'x-btn-icon',
+                    disabled: false,
+                    tooltip: language.rule_ListAddTip,
+                    handler: function () {
+                        var ruleDesigner = Ext.create('openHAB.automation.ruleProperties', {
+                            blockly: {
+                                blocks: {
+                                    block: [
+                                        {
+                                            type: 'openhab_rule',
+                                            deletable: false,
+                                            movable: false,
+                                            fields: [
+                                                {name: "NAME", value: language.rule_DesignerNewRule}
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        });
+
+                        if (ruleDesigner == null)
+                            return;
+
+                        Ext.getCmp('automationPropertyContainer').setNewProperty(ruleDesigner);
+                    }
+                }
+            ]
+        });
+
         var ruleList = Ext.create('Ext.grid.Panel', {
-            store: ruleStore,
+            store: designStore,
             header: false,
             split: true,
-//            tbar:toolbar,
+            tbar: toolbar,
             collapsible: false,
             multiSelect: false,
             columns: [
                 {
-                    text: language.rule_ListItem,
-                    flex: 3,
-                    dataIndex: 'item'
-                    /*,
-                     renderer:function (value, metadata, record) {
-                     var icon = "";
-                     var ref = itemConfigStore.findExact("name", value);
-                     if (ref != -1) {
-                     if (itemConfigStore.getAt(ref).get('icon') != "")
-                     icon = '<img src="../images/' + itemConfigStore.getAt(ref).get('icon') + '.png" align="left" height="16">';
-                     }
-
-                     return '<div>' + icon + '</div><div style="margin-left:20px">' + value + '</div>';
-                     }*/
-                },
-                {
-                    text: language.rule_ListRule,
-                    flex: 4,
-                    dataIndex: 'label'
-                    /*,
-                     renderer:function (value, metadata, record, row, col, store, gridView) {
-                     var img = '';
-                     if (record.get("persistence") != null) {
-                     var services = record.get("persistence");
-                     if (services != "")
-                     img = '<img src="images/database-small.png">';
-                     }
-
-                     return '<span>' + value + '</span><span style="float:right">' + img + '</span>';
-                     }*/
+                    flex: 1,
+                    dataIndex: 'name'
                 }
             ],
             listeners: {
                 itemclick: function (grid, record) {
+                    if (record == null)
+                        return;
+
+                    Ext.Ajax.request({
+                        url: HABminBaseURL + "/config/designer/" + record.get("id"),
+                        headers: {'Accept': 'application/json'},
+                        method: 'GET',
+                        success: function (response, opts) {
+                            var json = Ext.decode(response.responseText);
+                            if(json == null)
+                                return;
+                            var ruleDesigner = Ext.create('openHAB.automation.ruleProperties', {
+                                ruleId: json.id,
+                                blockly: {
+                                    blocks: json
+                                }
+                            });
+
+                            if (ruleDesigner == null)
+                                return;
+
+                            Ext.getCmp('automationPropertyContainer').setNewProperty(ruleDesigner);
+                        },
+                        failure: function (result, request) {
+                            handleStatusNotification(NOTIFICATION_ERROR,
+                                sprintf(language.rule_ListGetError, options.config.name));
+                        },
+                        callback: function (options, success, response) {
+                            // Enable toolbar
+                            toolbar.getComponent('delete').enable();
+                        }
+                    });
+
+
                 }
             }
         });
@@ -94,6 +168,37 @@ Ext.define('openHAB.automation.ruleList', {
         this.items = ruleList;
 
         this.callParent();
+
+
+        function deleteRule(button, text, options) {
+            if (button !== 'yes')
+                return;
+
+            // Tell OH to Remove the item
+            Ext.Ajax.request({
+                url: HABminBaseURL + "/config/designer/" + options.config.id,
+                headers: {'Accept': 'application/json'},
+                method: 'DELETE',
+                success: function (response, opts) {
+                    handleStatusNotification(NOTIFICATION_OK,
+                        sprintf(language.rule_ListDeleteOk, options.config.name));
+                },
+                failure: function (result, request) {
+                    handleStatusNotification(NOTIFICATION_ERROR,
+                        sprintf(language.rule_ListDeleteError, options.config.name));
+                },
+                callback: function (options, success, response) {
+                    // Reload the store
+                    designStore.reload();
+
+                    // Disable delete
+                    toolbar.getComponent('delete').disable();
+
+                    // Clear the design
+                    Ext.getCmp('automationPropertyContainer').removeProperty();
+                }
+            });
+        }
     }
 })
 ;

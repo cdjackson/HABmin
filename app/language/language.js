@@ -611,6 +611,24 @@ var language = {
     rule_EditorLoadedOk: "Rule model '%s' loaded successfully.",
     rule_EditorErrorNoModel: "Error loading rule model - no model defined",
 
+    // automation/ruleProperties.js
+    rule_DesignerSaveTip: "Save changes to the rule",
+    rule_DesignerCancelTip: "Cancel the changes made to the rule",
+    rule_DesignerToolboxLogic: "Logic",
+    rule_DesignerToolboxLoops: "Loops",
+    rule_DesignerToolboxMath: "Math",
+    rule_DesignerToolboxItems: "Items",
+    rule_DesignerToolboxFunctions: "Functions",
+    rule_DesignerToolboxLibrary: "Library",
+    rule_DesignerErrorSavingRule: "Error saving rule '%s'.",
+    rule_DesignerSaveOk: "Rule '%s' saved successfully.",
+    rule_DesignerErrorReadingRule: "Error reading rule!",
+    rule_DesignerErrorReadingRuleName: "Error reading rule name!",
+    rule_DesignerIdError: "ID Consistency error saving rule '%s'. Rule may have been duplicated.",
+    rule_DesignerRuleName: "Rule Name:",
+    rule_DesignerRuleTooltip: "Initialises a new openHAB rule. The rule name is set in the box.",
+    rule_DesignerNewRule: "New Rule",
+
     // automation/ruleLibrary.js
     rule_LibraryTitle: "Rule Library",
     rule_LibraryRule: "Rule",
@@ -619,6 +637,14 @@ var language = {
     rule_ListTitle: "Rules",
     rule_ListItem: "Item",
     rule_ListRule: "Rule",
+    rule_ListDeleteTip: "Delete the selected rule",
+    rule_ListAddTip: "Add a new rule",
+    rule_ListConfirmDeleteTitle: "Delete Rule",
+    rule_ListConfirmDeleteMsg: "Are you sure you want to delete the rule '%s'?",
+    rule_ListDeleteOk: "Design '%s' deleted successfully.",
+    rule_ListDeleteError: "Error deleting design '%s'!",
+    rule_ListGetError: "Error receiving design '%d'!",
+
 
     // automation/notificationList.js
     notification_ListTitle: "Notifications"

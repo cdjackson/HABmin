@@ -55,6 +55,12 @@ module.exports = function (grunt) {
                 src: ['js/jsprintf.js', 'js/moment.js', 'js/highcharts.js', 'js/highcharts-more.js', 'js/jit.js', 'js/ext-all.js', 'js/jquery.min.js', 'js/jquery.atmosphere.js'],
                 dest: 'build/webapps/habmin/js/'
             },
+            extuxblockly: {
+                expand: true,
+                flatten: true,
+                src: ['js/extux/blockly/*.js'],
+                dest: 'build/webapps/habmin/js/extux/blockly'
+            },
             extuxgrid: {
                 expand: true,
                 flatten: true,
@@ -117,6 +123,16 @@ module.exports = function (grunt) {
                 expand: true,
                 src: ['js/extux/statusbar/images/**'],
                 dest: 'build/webapps/habmin/'
+            },
+            blocklymedia: {
+                expand: true,
+                src: ['js/extux/blockly/media/**'],
+                dest: 'build/webapps/habmin/js/extux/blockly/media'
+            },
+            blocklymsg: {
+                expand: true,
+                src: ['js/extux/blockly/msg/**'],
+                dest: 'build/webapps/habmin/js/extux/blockly/msg'
             }
         },
         cssmin: {
@@ -151,6 +167,9 @@ module.exports = function (grunt) {
         'json-minify': {
             language: {
                 files: 'build/webapps/habmin/app/language/*.json'
+            },
+            blocklymsg: {
+                files: 'build/webapps/habmin/js/extjs/blockly/msg/*.json'
             }
         },
         compress: {

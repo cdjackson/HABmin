@@ -45,7 +45,7 @@ Ext.define('openHAB.automation.ruleLibrary', {
         this.title = language.rule_LibraryTitle;
 
         var ruleList = Ext.create('Ext.grid.Panel', {
-            store: ruleLibraryStore,
+//            store: ruleLibraryStore,
             header: false,
             split: true,
 //            tbar:toolbar,

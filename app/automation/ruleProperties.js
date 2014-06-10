@@ -37,12 +37,16 @@
 
 
 Ext.define('openHAB.automation.ruleProperties', {
-    extend:'Ext.panel.Panel',
-    layout:'fit',
-    tabTip:'Rule Properties',
-    header:false,
+    extend: 'Ext.ux.blockly.Blockly',
+    tabTip: 'Rule Properties',
+    header: false,
+    border: false,
+    autoDestroy: true,
+    ruleId: null,
 
-    initComponent:function () {
+    initComponent: function () {
+        var me = this;
+
         var ruleTriggerTypeArray = [
             {id: 0, label: 'Item command was received ...'},
             {id: 1, label: 'Item state was updated ...'},
@@ -91,146 +95,180 @@ Ext.define('openHAB.automation.ruleProperties', {
         ];
 
         var ruleTriggerTypeStore = Ext.create('Ext.data.Store', {
-            storeId:'ruleTriggerType',
-            fields:[
-                {type:'number', name:'id'},
-                {type:'text', name:'label'}
+            storeId: 'ruleTriggerType',
+            fields: [
+                {type: 'number', name: 'id'},
+                {type: 'text', name: 'label'}
             ]
         });
         ruleTriggerTypeStore.loadData(ruleTriggerTypeArray);
 
-        var ruleForm = new Ext.form.Panel({
-            border:false,
-            bodyPadding:5,
-            fieldDefaults:{
-                labelWidth:100
-            },
-            defaultType:'textfield',
-            items:[
+        var categoryArray = [
+            {name: "Logic", title: language.rule_DesignerToolboxLogic, icon: "images/sum.png"},
+            {name: "Loops", title: language.rule_DesignerToolboxLoops, icon: "images/edit-indent.png"},
+            {name: "Math", title: language.rule_DesignerToolboxMath, icon: "images/edit-mathematics.png"},
+            {name: "Items", title: language.rule_DesignerToolboxItems, icon: "images/edit-list.png"},
+            {name: "Functions", title: language.rule_DesignerToolboxFunctions, icon: "images/edit-code.png"},
+            {name: "Library", title: language.rule_DesignerToolboxLibrary, icon: "images/book-open.png"}
+        ];
+        var toolArray = [
+            {category: "Logic", block: {type:'controls_if'}},
+            {category: "Logic", block: {type:'logic_compare'}},
+            {category: "Logic", block: {type:'logic_operation'}},
+            {category: "Logic", block: {type:'logic_negate'}},
+            {category: "Logic", block: {type:'openhab_iftimer'}},
+            {category: "Logic", block: {type:'logic_boolean'}},
+     //       {category: "Logic", block: {type:'logic_ternary'}},
+     //       {category: "Loops", block: {type:'controls_whileUntil'}},
+     //       {category: "Loops", block: {type:'controls_repeat_ext'}},
+     //       {category: "Loops", block: {type:'controls_for'}},
+     //       {category: "Loops", block: {type:'controls_forEach'}},
+     //       {category: "Loops", block: {type:'controls_flow_statements'}},
+            {category: "Math", block: {type:'math_number'}},
+            {category: "Math", block: {type:'math_arithmetic'}},
+     //       {category: "Math", block: {type:'math_single'}},
+     //       {category: "Math", block: {type:'math_trig'}},
+     //       {category: "Math", block: {type:'math_constant'}},
+     //       {category: "Math", block: {type:'math_number_property'}},
+     //       {category: "Math", block: {type:'math_change'}},
+            {category: "Math", block: {type:'math_round'}},
+     //       {category: "Math", block: {type:'math_modulo'}},
+            {category: "Math", block: {type:'math_constrain'}},
+     //       {category: "Math", block: {type:'math_random_int'}},
+            {category: "Items", block: {type:'openhab_itemset'}},
+            {category: "Items", block: {type:'openhab_itemget'}},
+            {category: "Items", block: {type:'openhab_itemcmd'}},
+            {category: "Items", block: {type:'openhab_persistence_get'}},
+            {category: "Items", block: {type:'variables_set'}},
+            {category: "Items", block: {type:'variables_get'}},
+            {category: "Items", block: {type:'openhab_constantget'}},
+            {category: "Items", block: {type:'openhab_constantset'}},
+            {category: "Items", block: {type:'openhab_state_onoff'}},
+            {category: "Items", block: {type:'openhab_state_openclosed'}},
+            {category: "Items", block: {type:'text'}}
+                //,
+//            {category: "Functions", block: {type:'procedures_ifreturn'}}
+        ];
+
+
+
+
+        var toolbar = Ext.create('Ext.toolbar.Toolbar', {
+            items: [
                 {
-                    fieldLabel:'Rule Name',
-                    name:'name',
-                    anchor:'100%'
+                    icon: 'images/cross.png',
+                    itemId: 'cancel',
+                    text: language.cancel,
+                    cls: 'x-btn-icon',
+                    disabled: true,
+                    tooltip: language.rule_DesignerCancelTip,
+                    handler: function () {
+                    }
                 },
                 {
-                    fieldLabel:'Description',
-                    name:'description',
-                    anchor:'100%'
+                    icon: 'images/disk.png',
+                    itemId: 'save',
+                    text: language.save,
+                    cls: 'x-btn-icon',
+                    disabled: true,
+                    tooltip: language.rule_DesignerSaveTip,
+                    handler: function () {
+                        var rule = me.getBlocks();
+
+                        // Sanity check
+                        if (rule == null || rule.block == null || rule.block.length == 0) {
+                            handleStatusNotification(NOTIFICATION_ERROR,
+                                sprintf(language.rule_DesignerErrorReadingRule));
+                            return;
+                        }
+
+                        // Get the rule name
+                        if (rule.block[0].fields == null || rule.block[0].fields.length == 0) {
+                            handleStatusNotification(NOTIFICATION_ERROR,
+                                sprintf(language.rule_DesignerErrorReadingRuleName));
+                            return;
+                        }
+
+                        var ruleName;
+                        for (var v = 0; v < rule.block[0].fields.length; v++) {
+                            if (rule.block[0].fields[v].name == "NAME") {
+                                ruleName = rule.block[0].fields[v].value;
+                                break;
+                            }
+                        }
+
+                        // Check that we have a name!
+                        if (ruleName == null || ruleName == "") {
+                            handleStatusNotification(NOTIFICATION_ERROR,
+                                sprintf(language.rule_DesignerErrorReadingRuleName));
+                            return;
+                        }
+
+                        var bean = {};
+                        if(me.ruleId != null)
+                            bean.id = me.ruleId;
+                        bean.block = rule.block[0];
+                        bean.name = ruleName;
+
+                        Ext.Ajax.request({
+                            url: HABminBaseURL + "/config/designer/" + (me.ruleId == null ? "" : me.ruleId),
+                            headers: {'Accept': 'application/json'},
+                            method: me.ruleId == null ? 'POST' : 'PUT',
+                            jsonData: bean,
+                            success: function (response, opts) {
+                                var json = Ext.decode(response.responseText);
+                                if (json == null) {
+                                    handleStatusNotification(NOTIFICATION_ERROR,
+                                        sprintf(language.rule_DesignerErrorSavingRule, ruleName));
+                                    return;
+                                }
+
+                                if (me.ruleId == null) {
+                                    me.ruleId = json.id;
+                                }
+                                else if (me.ruleId != json.id) {
+                                    handleStatusNotification(NOTIFICATION_ERROR,
+                                        sprintf(language.rule_DesignerIdError, ruleName));
+                                }
+
+                                // Update the toolbar
+                                toolbar.getComponent('save').disable();
+                                toolbar.getComponent('cancel').disable();
+
+                                handleStatusNotification(NOTIFICATION_OK,
+                                    sprintf(language.rule_DesignerSaveOk, ruleName));
+                            },
+                            failure: function (result, request) {
+                                handleStatusNotification(NOTIFICATION_ERROR,
+                                    sprintf(language.rule_DesignerErrorSavingRule, ruleName));
+                            },
+                            callback: function (options, success, response) {
+                                // Reload the store
+                                designStore.reload();
+                            }
+                        });
+                    }
                 }
             ]
         });
 
-        var ruleTrigger = Ext.create('Ext.panel.Panel', {
-            padding:'0 5 5 5',
-            title:'Trigger',
-            collapsed:false,
-            collapsible:true,
-            layout:{
-                type:'vbox',
-                align:'stretch',
-                pack:'start'
-            },
-            minHeight:100
-        });
+        this.tbar = toolbar;
+        if (this.blockly == null)
+            this.blockly = {};
 
-        var ruleAction = Ext.create('Ext.panel.Panel', {
-            padding:'0 5 5 5',
-            title:'Action',
-            collapsed:false,
-            collapsible:true,
-            layout:{
-                type:'vbox',
-                align:'stretch',
-                pack:'start'
-            },
-            minHeight:100
-        });
-
-        var ruleContainer = Ext.create('Ext.panel.Panel', {
-            layout:{
-                type:'vbox',
-                align:'stretch',
-                pack:'start'
-            },
-            items:[
-                ruleForm,
-                ruleTrigger,
-                ruleAction
-            ]
-        });
-
-        addTrigger();
-
-
-        this.items = [ruleContainer];
+        this.blockly.toolbox = true;
+        this.blockly.collapse = true;
+        this.blockly.toolboxCategories = categoryArray;
+        this.blockly.toolboxTools = toolArray;
+        this.blockly.trashcan = true;
+        this.blockly.path = 'js/extux/blockly/';
+        this.blockly.listeners = {
+            workspacechanged: function () {
+                toolbar.getComponent('cancel').enable();
+                toolbar.getComponent('save').enable();
+            }
+        };
         this.callParent();
-
-        function addTrigger() {
-
-            var trigger = Ext.create('Ext.form.Panel', {
-                xtype:'form',
-                border:false,
-                fieldDefaults:{
-                    labelAlign:'top',
-                    msgTarget:'side'
-                },
-                defaults:{
-                    border:false,
-                    xtype:'panel',
-                    padding:10
-                },
-                layout: 'column',
-                items:[
-                    {
-                        xtype:'combobox',
-                        fieldLabel:'Trigger Type',
-                        store:ruleTriggerTypeStore,
-                        valueField: 'id',
-                        displayField: 'label',
-                        queryMode: 'local',
-                        name:'type',
-                        columnWidth: 0.4
-                    },
-                    {
-                        xtype:'textfield',
-                        fieldLabel:'Parameter',
-                        name:'Parameter',
-                        columnWidth: 0.6
-                    },
-                    {
-                        width:100,
-                        items: [
-                            {
-                                xtype:'button',
-                                icon:'images/minus-button.png',
-                                text:'Delete',
-                                width:80,
-                                listeners:{
-                                    scope: this,
-                                    click:function (btn, e, eOpts) {
-                                        var x = btn.up("form");
-                                        ruleTrigger.remove(x);
-                                    }
-                                }
-                            },
-                            {
-                                xtype:'button',
-                                icon:'images/plus-button.png',
-                                text:'Add',
-                                width:80,
-                                listeners:{
-                                    scope: this,
-                                    click:function (btn, e, eOpts) {
-                                        addTrigger();
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                ]
-            });
-            ruleTrigger.add(trigger);
-        }
     }
 })
 ;
