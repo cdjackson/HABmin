@@ -7,14 +7,15 @@
     "grunt": "~0.4.2"
   },
   "devDependencies": {
-      "grunt-contrib-cssmin":         "*",
-      "grunt-contrib-copy":           "*",
-      "grunt-contrib-htmlmin":        "*",
-      "grunt-htmlhint":               "*",
-      "grunt-xmlmin":                 "*",
-      "grunt-json-minify":            "*",
-      "grunt-contrib-uglify":         "*",
-      "grunt-contrib-compress":       "*"
+    "grunt-contrib-cssmin": "*",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-htmlmin": "*",
+    "grunt-htmlhint": "*",
+    "grunt-xmlmin": "*",
+    "grunt-json-minify": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-compress": "*",
+    "grunt": "~0.4.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
