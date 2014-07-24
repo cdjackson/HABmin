@@ -128,19 +128,21 @@ Ext.define('openHAB.graph.itemList', {
                     }
                 },
                 {
+                    text: language.graph_ItemName,
+                    hideable: true,
+                    flex: 1,
+                    hidden: true,
+                    width: 75,
+                    sortable: true,
+                    dataIndex: 'name'
+                },
+                {
                     text: language.graph_ItemTitle,
-                    hideable: false,
+                    hideable: true,
                     flex: 1,
                     width: 75,
                     sortable: true,
-                    dataIndex: 'label',
-                    renderer: function (value, metaData, record, row, col, store, gridView) {
-                        if (value != "")
-                            return value;
-                        if (record == null)
-                            return "";
-                        return record.get('name');
-                    }
+                    dataIndex: 'label'
                 },
                 {
                     text: language.graph_LastValue,

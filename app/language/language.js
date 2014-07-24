@@ -503,7 +503,8 @@ var language = {
     graph_ItemListReset: "Reset List",
     graph_ItemListResetTip: "Clear Selected Channels and Reset Period",
     graph_ItemListFilterDefault: "filter",
-    graph_ItemTitle: "Item",
+    graph_ItemTitle: "Label",
+    graph_ItemName: "Item",
     graph_LastValue: "Last Value",
     graph_ItemIcon: "Item Icon",
 
