@@ -45,6 +45,16 @@
             <maximum>1</maximum>
             <values></values>
         </config.setting>
+        <config.setting>
+            <name>softReset</name>
+            <label>Enable soft reset</label>
+            <description>Perform a soft reset on the controller during a heal</description>
+            <optional>true</optional>
+            <defaultvalue>false</defaultvalue>
+            <minimum>0</minimum>
+            <maximum>1</maximum>
+            <values></values>
+        </config.setting>
     </binding.config>
 
     <!-- Item binding configuration -->
@@ -53,8 +63,3 @@
         </binding.io>
     </binding.items>
 </binding>
-
-
-
-
-
