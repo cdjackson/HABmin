@@ -60,7 +60,7 @@ Ext.define('openHAB.config.sitemapProperties', {
             Setpoint: ["item", "label", "format", "units", "translateService", "translateRule", "itemicon", "minValue", "maxValue", "step", "labelcolor", "valuecolor", "visibility"],
             Slider: ["item", "label", "format", "units", "translateService", "translateRule", "itemicon", "sendFrequency", "switchSupport", "labelcolor", "valuecolor", "visibility"],
             Text: ["item", "label", "format", "units", "translateService", "translateRule", "itemicon", "labelcolor", "valuecolor", "visibility"],
-            Video: ["label", "format", "units", "url", "itemicon", "labelcolor", "valuecolor", "visibility"],
+            Video: ["label", "format", "units", "url", "itemicon", "labelcolor", "valuecolor", "encoding", "visibility"],
             Webview: ["label", "format", "units", "url", "height", "itemicon", "labelcolor", "valuecolor", "visibility"]
         };
 
@@ -91,6 +91,7 @@ Ext.define('openHAB.config.sitemapProperties', {
             itemicon: language.config_SitemapHelpIcon,
             label: language.config_SitemapHelpLabel,
             format: language.config_SitemapHelpFormat,
+            encoding: language.config_SitemapHelpEncoding,
             units: language.config_SitemapHelpUnits,
             translateService: language.config_SitemapHelpTranslateSvc,
             translateRule: language.config_SitemapHelpTranslateRule,
@@ -256,8 +257,10 @@ Ext.define('openHAB.config.sitemapProperties', {
                     allowBlank: true
                 })
             },
+            period: {displayName: language.config_SitemapPropertiesPeriod},
             units: {displayName: language.config_SitemapPropertiesUnits},
             label: {displayName: language.config_SitemapPropertiesLabel},
+            encoding: {displayName: language.config_SitemapPropertiesEncoding},
             translateService: {
                 displayName: language.config_SitemapPropertiesTranslationService,
                 renderer: function (v) {
@@ -301,7 +304,10 @@ Ext.define('openHAB.config.sitemapProperties', {
             switchSupport: {displayName: language.config_SitemapPropertiesSwitchSupport},
             url: {displayName: language.config_SitemapPropertiesURL},
             height: {displayName: language.config_SitemapPropertiesHeight},
-            refresh: {displayName: language.config_SitemapPropertiesRefreshPeriod}
+            refresh: {displayName: language.config_SitemapPropertiesRefreshPeriod},
+            visibility: {displayName: language.config_SitemapPropertiesVisibility},
+            labelcolor: {displayName: language.config_SitemapPropertiesLabelColor},
+            valuecolor: {displayName: language.config_SitemapPropertiesValueColor}
         };
 
 

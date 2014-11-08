@@ -450,6 +450,7 @@ var language = {
     config_SitemapHelpFrequency: "?",
     config_SitemapHelpSeparator: "?",
     config_SitemapHelpService: "?",
+    config_SitemapHelpEncoding: "Set the video encoding",
     config_SitemapHelpStep: "Set the step value",
     config_SitemapHelpSwitchSupport: "?",
     config_SitemapHelpURL: "Set the URL attached to this widget",
@@ -461,6 +462,7 @@ var language = {
     config_SitemapPropertiesFormat: "Format",
     config_SitemapPropertiesUnits: "Units",
     config_SitemapPropertiesLabel: "Label",
+    config_SitemapPropertiesEncoding: "Encoding",
     config_SitemapPropertiesTranslationService: "Translation Service",
     config_SitemapPropertiesMapping: "Mapping",
     config_SitemapPropertiesTranslationRule: "Translation Rule",
@@ -486,7 +488,11 @@ var language = {
     config_SitemapPropertiesSaveErr: "Error saving sitemap",
     config_SitemapPropertiesFrameErr: "Frames must have children [%s]",
     config_SitemapPropertiesLabelWidget: "Widget",
+    config_SitemapPropertiesPeriod: "Period",
+    config_SitemapPropertiesLabelColor: "Label Color",
+    config_SitemapPropertiesValueColor: "Value Color",
     config_SitemapPropertiesLabelItem: "Item",
+    config_SitemapPropertiesVisibility: "Visibility",
     config_SitemapPropertiesLabelLabel: "Label",
 
     // graph/graph.js
