@@ -15,6 +15,12 @@
     <!-- Icon list-->
     <icons>
         <icon>
+            <menuicon>attic.png</menuicon>
+            <name>attic</name>
+            <label>Attic</label>
+            <description></description>
+        </icon>
+        <icon>
             <menuicon>bath.png</menuicon>
             <name>bath</name>
             <label>Bath</label>
