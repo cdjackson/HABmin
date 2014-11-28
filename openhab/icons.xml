@@ -95,7 +95,7 @@
         <icon>
             <menuicon>frontdoor-closed.png</menuicon>
             <name>frontdoor</name>
-            <label>Door sensor</label>
+            <label>Front Door</label>
             <description></description>
         </icon>
         <icon>
