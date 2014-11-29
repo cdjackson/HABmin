@@ -38,10 +38,58 @@
             <label>Bluetooth</label>
             <description></description>
         </icon>
-        <icon>
-            <menuicon>cistern.png</menuicon>
-            <name>cistern</name>
-            <label>Cistern</label>
+       		<icon>
+            <menuicon>boy0.png</menuicon>
+            <name>boy0</name>
+            <label>Boy 0</label>
+            <description></description>
+        </icon>
+		<icon>
+            <menuicon>boy1.png</menuicon>
+            <name>boy1</name>
+            <label>Boy 1</label>
+            <description></description>
+		</icon>
+		<icon>
+            <menuicon>boy2.png</menuicon>
+            <name>boy2</name>
+            <label>Boy 2</label>
+            <description></description>
+        </icon>
+		<icon>
+            <menuicon>boy3.png</menuicon>
+            <name>boy3</name>
+            <label>Boy 3</label>
+            <description></description>
+        </icon>
+		<icon>
+            <menuicon>boy4.png</menuicon>
+            <name>boy4</name>
+            <label>Boy 4</label>
+            <description></description>
+        </icon>
+		<icon>
+            <menuicon>boy5.png</menuicon>
+            <name>boy5</name>
+            <label>Boy 5</label>
+            <description></description>
+        </icon>
+		<icon>
+            <menuicon>boy6.png</menuicon>
+            <name>boy6</name>
+            <label>Boy 6</label>
+            <description></description>
+        </icon>
+		<icon>
+            <menuicon>boy7.png</menuicon>
+            <name>boy7</name>
+            <label>Boy 7</label>
+            <description></description>
+        </icon>
+		<icon>
+            <menuicon>calendar.png</menuicon>
+            <name>calendar</name>
+            <label>Calendar</label>
             <description></description>
         </icon>
         <icon>
@@ -54,6 +102,24 @@
             <menuicon>chart.png</menuicon>
             <name>chart</name>
             <label>Chart</label>
+            <description></description>
+        </icon>
+		<icon>
+            <menuicon>child1.png</menuicon>
+            <name>child1</name>
+            <label>Child 1</label>
+            <description></description>
+        </icon>
+		<icon>
+            <menuicon>child2.png</menuicon>
+            <name>child2</name>
+            <label>Child 2</label>
+            <description></description>
+        </icon>
+		<icon>
+            <menuicon>cistern.png</menuicon>
+            <name>cistern</name>
+            <label>Cistern</label>
             <description></description>
         </icon>
         <icon>
@@ -80,6 +146,18 @@
             <label>Contact</label>
             <description></description>
         </icon>
+		<icon>
+            <menuicon>corridor.png</menuicon>
+            <name>corridor</name>
+            <label>Corridor</label>
+            <description></description>
+        </icon>
+		<icon>
+            <menuicon>door-closed.png</menuicon>
+            <name>door</name>
+            <label>Door</label>
+            <description></description>
+        </icon>
         <icon>
             <menuicon>energy.png</menuicon>
             <name>energy</name>
@@ -101,7 +179,7 @@
         <icon>
             <menuicon>frontdoor-closed.png</menuicon>
             <name>frontdoor</name>
-            <label>Door sensor</label>
+            <label>Front Door</label>
             <description></description>
         </icon>
         <icon>
@@ -146,6 +224,12 @@
             <label>House</label>
             <description></description>
         </icon>
+		<icon>
+            <menuicon>inverter.png</menuicon>
+            <name>inverter</name>
+            <label>Inverter</label>
+            <description></description>
+        </icon>
         <icon>
             <menuicon>keyring.png</menuicon>
             <name>keyring</name>
@@ -168,6 +252,12 @@
             <menuicon>lock.png</menuicon>
             <name>lock</name>
             <label>Lock</label>
+            <description></description>
+        </icon>
+		<icon>
+            <menuicon>moon.png</menuicon>
+            <name>moon</name>
+            <label>Moon</label>
             <description></description>
         </icon>
         <icon>
@@ -212,6 +302,12 @@
             <label>Rollershutter</label>
             <description></description>
         </icon>
+		<icon>
+            <menuicon>settings.png</menuicon>
+            <name>settings</name>
+            <label>Settings</label>
+            <description></description>
+        </icon>
         <icon>
             <menuicon>sewerage.png</menuicon>
             <name>sewerage</name>
@@ -236,6 +332,18 @@
             <label>Slider</label>
             <description></description>
         </icon>
+		<icon>
+            <menuicon>smartheater.png</menuicon>
+            <name>smartheater</name>
+            <label>Smart Heater</label>
+            <description></description>
+        </icon>
+		<icon>
+            <menuicon>smiley.png</menuicon>
+            <name>smiley</name>
+            <label>Smiley</label>
+            <description></description>
+        </icon>
         <icon>
             <menuicon>socket.png</menuicon>
             <name>socket</name>
@@ -246,6 +354,18 @@
             <menuicon>sofa.png</menuicon>
             <name>sofa</name>
             <label>Sofa</label>
+            <description></description>
+        </icon>
+		<icon>
+            <menuicon>softener.png</menuicon>
+            <name>softener</name>
+            <label>Softener</label>
+            <description></description>
+        </icon>
+		<icon>
+            <menuicon>solarplant.png</menuicon>
+            <name>solarplant</name>
+            <label>Solar Plant</label>
             <description></description>
         </icon>
         <icon>
@@ -290,6 +410,12 @@
             <label>Wardrobe</label>
             <description></description>
         </icon>
+		<icon>
+            <menuicon>wardrobe2.png</menuicon>
+            <name>wardrobe2</name>
+            <label>Wardrobe 2</label>
+            <description></description>
+        </icon>
         <icon>
             <menuicon>wind.png</menuicon>
             <name>wind</name>
@@ -298,7 +424,6 @@
         </icon>
     </icons>
 </iconset>
-
 
 
 
