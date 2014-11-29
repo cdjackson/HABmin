@@ -14,6 +14,10 @@
     "warning": "Warnung",
     "success": "Erfolg",
 	"personalisation_Language": "Sprache",
+	"cancel": "Abbrechen",
+    "information": "Information",
+    "save": "Speichern",
+    "edit": "Ändern",
 
     "onlineState_Online": "openHAB ist online",
     "onlineState_Offline": "openHAB ist offline",
