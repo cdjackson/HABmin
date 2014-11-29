@@ -239,12 +239,21 @@ Ext.define('openHAB.config.itemList', {
                     dataIndex: 'name',
                     renderer: function (value, metadata, record) {
                         var icon = "";
-                        var ref = itemConfigStore.findExact("name", value);
+						var iconref = "";
+						var ref = itemConfigStore.findExact("name", value);
                         if (ref != -1) {
-                            if (itemConfigStore.getAt(ref).get('icon') != "")
-                                icon = '<img src="../images/' + itemConfigStore.getAt(ref).get('icon') + '.png" align="left" height="16">';
-                        }
-
+                            if (itemConfigStore.getAt(ref).get('icon') != "") {
+								iconref = itemIconStore.findExact("name", itemConfigStore.getAt(ref).get('icon'));
+								if (iconref != -1) {
+									if (itemIconStore.getAt(iconref).get('menuicon') != "")
+										icon = '<img src="../images/' + itemIconStore.getAt(iconref).get('menuicon') + '" align="left" height="16">';
+								}
+                        		else {
+									// For an icon that isn't known to the REST service
+									icon = '<img src="../images/' + itemConfigStore.getAt(ref).get('icon') + '.png" align="left" height="16">';
+								}
+							}
+						}
                         return '<div>' + icon + '</div><div style="margin-left:20px">' + value + '</div>';
                     }
                 },
