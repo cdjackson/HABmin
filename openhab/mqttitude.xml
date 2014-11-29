@@ -1,0 +1,60 @@
+<!-- Binding configuration for the Mqttitude binding in openHAB -->
+<binding>
+    <!-- Full name presented to the user -->
+    <name>Mqttitude (OwnTracks) Binding</name>
+    <!-- PID name used within the OSGi layer -->
+    <pid>mqttitude</pid>
+    <!-- Binding type: protocol, ui -->
+    <type>protocol</type>
+    <!-- Author -->
+    <author>Ben Jones</author>
+    <!-- Current version of the binding to which the file is applicable -->
+    <version>1.4.0</version>
+    <!-- Minimum version of openHAB required to run this binding -->
+    <oh_version>1.4.0</oh_version>
+
+    <!-- Binding configuration settings -->
+    <binding.config>
+        <config.setting>
+            <name>home.lat</name>
+            <label>Home Latitude</label>
+            <description>The latitude of home, only used if no OwnTracks waypoints.</description>
+            <optional>true</optional>
+            <defaultvalue></defaultvalue>
+            <minimum></minimum>
+            <maximum></maximum>
+            <values></values>
+        </config.setting>
+        <config.setting>
+            <name>home.long</name>
+            <label>Home Longitude</label>
+            <description>The longitude of home, only used if no OwnTracks waypoints.</description>
+            <optional>true</optional>
+            <defaultvalue></defaultvalue>
+            <minimum></minimum>
+            <maximum></maximum>
+            <values></values>
+        </config.setting>
+        <config.setting>
+            <name>geofence</name>
+            <label>Home Geofence</label>
+            <description>The size of the geofence around your home location, in metres.</description>
+            <optional>true</optional>
+            <defaultvalue>100</defaultvalue>
+            <minimum></minimum>
+            <maximum></maximum>
+            <values></values>
+        </config.setting>
+    </binding.config>
+
+    <!-- Item binding configuration -->
+    <binding.items>
+        <binding.io>
+        </binding.io>
+    </binding.items>
+</binding>
+
+
+
+
+
