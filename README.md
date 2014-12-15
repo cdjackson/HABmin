@@ -1,5 +1,6 @@
 Updates
 -------
+* This version of HABmin will not receive significant updates. For the new version, see http://github.com/cdjackson/HABmin2.
 * 30-04-2014: Initial graphical rule designer ready for testing (see the [rules branch](https://github.com/cdjackson/HABmin/tree/rules) for code, or [the overview here](https://github.com/cdjackson/HABmin/wiki/Rule-Designer:-Overview))
 * 18-04-2014: Add ability to view _HABmin_ charts wihin openHAB sitemap.
 * 22-03-2014: Add a 'data pending' indicator in zwave to show when a configuration has not been confirmed.
