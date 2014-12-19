@@ -55,6 +55,16 @@
             <maximum>1</maximum>
             <values></values>
         </config.setting>
+        <config.setting>
+            <name>masterController</name>
+            <label>OpenHAB is Master</label>
+            <description>Sets openHAB as the master controller within the network so that it receives notifications etc from devices.</description>
+            <optional>true</optional>
+            <defaultvalue>false</defaultvalue>
+            <minimum>0</minimum>
+            <maximum>1</maximum>
+            <values></values>
+        </config.setting>
     </binding.config>
 
     <!-- Item binding configuration -->
