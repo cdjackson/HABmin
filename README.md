@@ -29,7 +29,7 @@ _HABmin_ is a web administration console for openHAB. It aims to provide a compl
 The interface is a modern browser based system providing point and click, and drag and drop input. As features are added, the wiki is being updated - please take a look. The interface supports multiple languages - please help with translations.
 
 
-![Item Config Screen](https://github.com/wiki/cdjackson/HABmin/habmin_itemconfig.png)
+![Item Config Screen](https://github.com/cdjackson/HABmin/wiki/habmin_itemconfig.png)
 
 _HABmin_ interfaces to OpenHAB through a RESTful style interface - this is implemented as a separate bundle to the openHAB REST interfaces that support the standard user interface.
 
