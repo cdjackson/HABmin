@@ -33,16 +33,16 @@ The interface is a modern browser based system providing point and click, and dr
 
 _HABmin_ interfaces to OpenHAB through a RESTful style interface - this is implemented as a separate bundle to the openHAB REST interfaces that support the standard user interface.
 
-![Sitemap Config Screen](https://github.com/wiki/cdjackson/HABmin/habmin_sitemap.png)
+![Sitemap Config Screen](https://github.com/cdjackson/HABmin/wiki/habmin_sitemap.png)
 
 In addition to the REST interface, it is possible to define files that describe the configurable features of OpenHAB. These files describe the configuration required for a binding or an item and are used within openHAB and exposed through the _HABmin_ REST interface. The files are defined in XML format and are not directly accessed by _HABmin_.
 
 
-![Graph Screen](https://github.com/wiki/cdjackson/HABmin/habmin_graph.png)
+![Graph Screen](https://github.com/cdjackson/HABmin/wiki/habmin_graph.png)
 
 While _HABmin_ is a supporting project to OpenHAB,  providing access to openHAB's features, since the existing REST interface does not support most of the functionality required by _HABmin_, _HABmin_ may drive this part of openHAB to some extent. It is also expected that as functionality is added to openHAB, _HABmin_ will need to have its backend modified to reflect the final interfaces implemented in openHAB.
 
-![Binding Config Screen](https://github.com/wiki/cdjackson/HABmin/habmin_bindingconfig.png)
+![Binding Config Screen](https://github.com/cdjackson/HABmin/wiki/habmin_bindingconfig.png)
 
 
 ###Status
@@ -66,7 +66,7 @@ _HABmin_ is an open source project. It makes use of a number of libraries under 
 * moment.js for time management
 * JIT for some special charts
 
-![Bundles Screen](https://raw.github.com/wiki/cdjackson/HABmin/habmin_systembundles.png)
+![Bundles Screen](https://github.com/cdjackson/HABmin/wiki/habmin_systembundles.png)
 
 Installation
 ------------
