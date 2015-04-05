@@ -196,7 +196,7 @@ var translationServiceArray = [
     {name: "", label: language.translation_None},
     {name: "MAP", label: language.translation_MapFile},
     {name: "REGEX", label: language.translation_Regex},
-    {name: "JAVASCRIPT", label: language.translation_Javascript},
+    {name: "JS", label: language.translation_Javascript},
     {name: "EXEC", label: language.translation_Exec},
     {name: "XSLT", label: language.translation_XLS},
     {name: "XPATH", label: language.translation_XPath}
