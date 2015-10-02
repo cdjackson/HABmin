@@ -105,6 +105,7 @@ Ext.define('openHAB.config.zwaveDeviceList', {
                 {
                     icon: 'images/wrench--plus.png',
                     itemId: 'include',
+                    //id: 'include-btn',
                     text: language.zwave_DevicesIncludeButton,
                     cls: 'x-btn-icon',
                     disabled: false,
@@ -116,6 +117,28 @@ Ext.define('openHAB.config.zwaveDeviceList', {
                             jsonData: 'Include',
                             headers: {'Accept': 'application/json'},
                             success: function (response, opts) {
+                                // update the button label with timer
+                                var text = toolbar.items.get('include').getText();
+                                var timerCount = 30;
+                                
+                                // Disable other buttons
+                                Ext.each(toolbar.items.keys || [], function(key) {
+                                    toolbar.items.get(key).setDisabled(true);
+                                });
+                                var task = {
+                                    run: function() {
+                                        toolbar.items.get('include').setText(text + ' (' + timerCount-- + ')');
+                                        if (timerCount < 0) {
+                                            toolbar.items.get('include').setText(text);
+                                            Ext.TaskManager.stop(task);
+                                            Ext.each(toolbar.items.keys || [], function(key) {
+                                                toolbar.items.get(key).setDisabled(false);
+                                            });
+                                        }
+                                    },
+                                    interval: 1000 //1 second
+                                }
+                                Ext.TaskManager.start(task);
                             },
                             failure: function () {
                                 handleStatusNotification(NOTIFICATION_ERROR, language.zwave_DevicesActionError);
@@ -137,6 +160,28 @@ Ext.define('openHAB.config.zwaveDeviceList', {
                             jsonData: 'Exclude',
                             headers: {'Accept': 'application/json'},
                             success: function (response, opts) {
+                                 // update the button label with timer
+                                var text = toolbar.items.get('exclude').getText();
+                                var timerCount = 30;
+                                
+                                // Disable other buttons
+                                Ext.each(toolbar.items.keys || [], function(key) {
+                                    toolbar.items.get(key).setDisabled(true);
+                                });
+                                var task = {
+                                    run: function() {
+                                        toolbar.items.get('exclude').setText(text + ' (' + timerCount-- + ')');
+                                        if (timerCount < 0) {
+                                            toolbar.items.get('exclude').setText(text);
+                                            Ext.TaskManager.stop(task);
+                                            Ext.each(toolbar.items.keys || [], function(key) {
+                                                toolbar.items.get(key).setDisabled(false);
+                                            });
+                                        }
+                                    },
+                                    interval: 1000 //1 second
+                                }
+                                Ext.TaskManager.start(task);
                             },
                             failure: function () {
                                 handleStatusNotification(NOTIFICATION_ERROR, language.zwave_DevicesActionError);
