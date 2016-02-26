@@ -88,3 +88,5 @@ You can then start _HABmin_ at the address [http://localhost:8080/habmin/index.h
 Contributing
 ------------
 If you wish to help with this project, please feel free to clone the repository and work on some features. I would like to maintain a top level TODO/Issues list which lists the main features that require work. Please feel free to add to this list, or discuss implementation issues within the issue. If you are going to work on a feature please make it known so we can avoid duplication.
+
+Source files for the JARs included in this project are available at https://github.com/cdjackson/openhab/tree/HABmin/bundles/io/org.openhab.io.habmin/src/main/java/org/openhab/io/habmin
