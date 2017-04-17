@@ -45,7 +45,7 @@ While _HABmin_ is a supporting project to OpenHAB,  providing access to openHAB'
 ![Binding Config Screen](https://github.com/cdjackson/HABmin/wiki/habmin_bindingconfig.png)
 
 
-###Status
+### Status
 The project is just getting started. Currently implemented are the following -:
 * Graphing of data from the persistence store including saving and restoring charts.
 * Item editor
